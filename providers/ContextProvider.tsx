@@ -1,24 +1,47 @@
 'use client';
-import { DndElementType } from '@/types/element';
+import { DndElementType, ElementType } from '@/types/element';
 import { Dispatch, SetStateAction, createContext, useState } from 'react';
 
 type DesignerContextType = {
   selectedElement: string;
   setSelectedElement: Dispatch<SetStateAction<string>>;
-  elements: DndElementType[] | null;
-  addElement: (value: DndElementType) => void;
+  elements: { element: DndElementType; id: string }[];
+  addElement: ({
+    id,
+    element,
+  }: {
+    id: string;
+    element: DndElementType;
+  }) => void;
+  removeElement: (id: string) => void;
 };
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedElement, setSelectedElement] = useState('');
-  const [elements, setElements] = useState<DndElementType[] | null>(null);
-  const addElement = (element: DndElementType) => {
-    console.log('❄️ ~ file: ContextProvider.tsx:17 ~ element:', element);
+  const [elements, setElements] = useState<
+    { element: DndElementType; id: string }[]
+  >([]);
+  /* Add element */
+  const addElement = ({
+    id,
+    element,
+  }: {
+    id: string;
+    element: DndElementType;
+  }) => {
     setElements((prev) => {
-      if (!prev) return [element];
-      return [...prev, element];
+      if (!prev) return [{ id, element }];
+      return [...prev, { id, element }];
+    });
+  };
+  /* Remove element */
+  const removeElement = (id: string) => {
+    const newElements = elements.filter((element) => element.id !== id);
+
+    setElements((prev) => {
+      return newElements;
     });
   };
   return (
@@ -28,6 +51,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setSelectedElement,
         elements,
         addElement,
+        removeElement,
       }}
     >
       {children}

@@ -12,16 +12,19 @@ interface DndElementProps {
 
 const DndElement: React.FC<DndElementProps> = ({ id, name, icon: Icon }) => {
   const draggable = useDraggable({
-    id: id,
+    id: id + 'dnd-element',
     data: {
       isDndElement: true,
+      type: id,
     },
   });
   const { selectedElement, setSelectedElement } = useDesign();
 
   useDndMonitor({
     onDragStart: ({ active }) => {
-      setSelectedElement(active.id + '');
+      const isDndElement = active.data.current?.isDndElement;
+
+      isDndElement && setSelectedElement(active.data.current?.type + '');
     },
     onDragEnd: ({ active, over }) => {
       setSelectedElement('');

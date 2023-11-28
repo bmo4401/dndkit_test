@@ -1,4 +1,5 @@
 'use client';
+import { generateId } from '@/libs/utils';
 import { DndElementType } from '@/types/element';
 import { Heading1 } from 'lucide-react';
 import { useState } from 'react';

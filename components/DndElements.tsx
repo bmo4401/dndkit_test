@@ -26,10 +26,6 @@ export const FormElementsList = [
   Separator,
 ];
 const DndElements = () => {
-  useDndMonitor({
-    onDragStart: ({ active }) => {},
-  });
-
   return (
     <div className="w-1/3 flex flex-col">
       <div className=" flex-wrap flex  border border-rose-500 rounded-md">
