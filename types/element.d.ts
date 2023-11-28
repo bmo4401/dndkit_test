@@ -6,14 +6,14 @@ type ElementType =
   | 'Date'
   | 'Checkbox'
   | 'Text'
-  | 'Textarea'
+  | 'TextArea'
   | 'Select'
   | 'Number';
 type DndElementType = {
   type: ElementType;
   icon: LucideIcon;
   designComponent: React.FC<>;
-  propertyComponent: React.FC<PropertyProps>;
+  modifyComponent: React.FC<PropertyProps>;
   formComponent: React.FC<>;
 };
 

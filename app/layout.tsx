@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import ContextProvider from '@/providers/ContextProvider';
+import { cn } from '@/libs/utils';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,7 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body
+        className={cn(inter.className, 'w-screen h-screen overflow-hidden')}
+      >
         <ContextProvider> {children}</ContextProvider>
       </body>
     </html>

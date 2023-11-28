@@ -33,7 +33,7 @@ const DndElement: React.FC<DndElementProps> = ({ id, name, icon: Icon }) => {
       {...draggable.listeners}
       {...draggable.attributes}
       className={cn(
-        ' p-4 rounded-md border border-slate-500 flex items-center justify-center gap-1 flex-col',
+        'w-24 p-4 rounded-md border border-slate-500 flex items-center justify-center gap-1 flex-col',
         selectedElement === id ? 'opacity-60' : 'opacity-100',
       )}
       onClick={(e) => {

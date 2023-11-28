@@ -1,4 +1,5 @@
 'use client';
+import DndElementOverlay from '@/components/overlay/DndElementOverlay';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 
 const DndProvider = ({ children }: { children: React.ReactNode }) => {
@@ -6,7 +7,7 @@ const DndProvider = ({ children }: { children: React.ReactNode }) => {
     <DndContext>
       {children}
       <DragOverlay>
-        <div className="border border-rose-500 p-10">Overlay </div>
+        <DndElementOverlay />
       </DragOverlay>
     </DndContext>
   );

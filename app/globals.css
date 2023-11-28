@@ -7,3 +7,13 @@ body,
 :root {
   height: 100%;
 }
+
+input.hidden-control::-webkit-outer-spin-button,
+input.hidden-control::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'].hidden-control {
+  -moz-appearance: textfield;
+}
