@@ -10,7 +10,6 @@ import useSelect from "@/hooks/useSelect";
 
 const Frame = () => {
   const { elements, addElement } = useDesign();
-  console.log("❄️ ~ file: Frame.tsx:13 ~ elements:", elements);
   const { selectedElement } = useSelect();
   const droppable = useDroppable({
     id: "-drop-area",
@@ -20,20 +19,11 @@ const Frame = () => {
   });
   useDndMonitor({
     onDragEnd: ({ active, over }) => {
-      console.log("❄️ ~ file: Frame.tsx:22 ~ over:", over);
-      console.log("❄️ ~ file: Frame.tsx:22 ~ active:", active);
       const isDropArea = over?.id === "-drop-area";
       const isDndElement = active.data.current?.isDndElement;
-      const isTopHalf = over?.data.current?.isTopHalf;
-      console.log("❄️ ~ file: Frame.tsx:27 ~ isTopHalf:", isTopHalf);
-      const isBottomHalf = over?.data.current?.isBottomHalf;
-      console.log("❄️ ~ file: Frame.tsx:28 ~ isBottomHalf:", isBottomHalf);
-      if (isTopHalf || isBottomHalf) return;
-
+      if (!isDndElement) return;
       const type = active.data.current?.type;
-      console.log("❄️ ~ file: Frame.tsx:31 ~ type:", type);
       const DndElement = FormElements[type];
-      console.log("❄️ ~ file: Frame.tsx:35 ~ DndElement:", DndElement);
       /* Insert element */
       if (isDropArea && isDndElement && elements.length === 0) {
         addElement({ element: { ...DndElement, id: generateId() } });

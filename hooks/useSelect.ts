@@ -1,5 +1,5 @@
-import { DndElementType, ElementType } from '@/types/element';
-import { create } from 'zustand';
+import { DndElementType, ElementType } from "@/types/element";
+import { create } from "zustand";
 
 type selectedElementType = {
   isDndElement?: boolean;
@@ -16,10 +16,11 @@ interface State {
 const useDesigner = create<State>((set, get) => ({
   selectedElement: null,
 
-  setSelectedElement: (element: selectedElementType | null) =>
-    set((state) => ({
+  setSelectedElement: (element: selectedElementType | null) => {
+    return set((state) => ({
       selectedElement: element,
-    })),
+    }));
+  },
 }));
 
 export default useDesigner;

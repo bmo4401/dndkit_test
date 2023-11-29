@@ -48,7 +48,6 @@ const useDesigner = create<State>((set, get) => ({
     }));
   },
   removeElement: (id: string) => {
-    console.log("❄️ ~ file: useDesign.ts:51 ~ id:", id);
     set((state) => ({
       elements: state.elements.filter((element) => element.id !== id),
     }));

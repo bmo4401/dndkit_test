@@ -37,13 +37,10 @@ const DndElement: React.FC<DndElementProps> = ({ id, property: Property }) => {
       {...draggable.listeners}
       {...draggable.attributes}
       className={cn(
-        selectedElement?.isDndElement && selectedElement.type
+        selectedElement?.isDndElement && selectedElement.type === id
           ? "opacity-60"
           : "opacity-100",
       )}
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
     >
       <Property />
     </div>
