@@ -1,18 +1,20 @@
-import { FormElements } from '@/components/DndElements';
-import useDesign from '@/hooks/useDesign';
+import { FormElements } from "@/components/DndElements";
+import useSelect from "@/hooks/useSelect";
 
 const DndElementOverlay = () => {
-  const { selectedElement } = useDesign();
-  console.log(
-    '❄️ ~ file: DndElementOverlay.tsx:6 ~ selectedElement:',
-    selectedElement,
-  );
+  const { selectedElement } = useSelect();
 
   if (!selectedElement) return;
-  const OverLay = FormElements[selectedElement].designComponent;
+  const propertyOverlay =
+    selectedElement.isDndElement &&
+    FormElements[selectedElement.type].propertyComponent;
+  const designerOverlay =
+    selectedElement.isHandler &&
+    FormElements[selectedElement.type].designComponent;
+  const Overlay = (designerOverlay ?? propertyOverlay) as React.FC;
   return (
     <div className=" w-96">
-      <OverLay />
+      <Overlay />
     </div>
   );
 };

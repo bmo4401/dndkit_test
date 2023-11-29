@@ -54,8 +54,13 @@ const Form = () => {
   );
 };
 
-const Modify = () => {
-  return <div>Modify</div>;
+const Property = () => {
+  return (
+    <div className="w-24 p-4 rounded-md border border-slate-500 flex items-center justify-center gap-1 flex-col">
+      {Spacer.type}
+      <Spacer.icon />
+    </div>
+  );
 };
 
 const Spacer: DndElementType = {
@@ -63,7 +68,7 @@ const Spacer: DndElementType = {
   icon: SeparatorHorizontal,
   designComponent: Design,
   formComponent: Form,
-  modifyComponent: Modify,
+  propertyComponent: Property,
 };
 
 export default Spacer;

@@ -1,34 +1,45 @@
-'use client';
-import { FormElements } from '@/components/DndElements';
-import FrameElement from '@/components/FrameElement';
-import useDesign from '@/hooks/useDesign';
-import { generateId } from '@/libs/utils';
-import { useDndMonitor, useDraggable, useDroppable } from '@dnd-kit/core';
-import { Menu } from 'lucide-react';
-import { useState } from 'react';
+"use client";
+import { FormElements, FormElementsList } from "@/components/DndElements";
+import FrameElement from "@/components/DesignElement";
+import useDesign from "@/hooks/useDesign";
+import { generateId } from "@/libs/utils";
+import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
+import { Menu } from "lucide-react";
+import { useState } from "react";
 
 const Frame = () => {
   const { elements, addElement } = useDesign();
   const droppable = useDroppable({
-    id: 'drop-area',
+    id: "drop-area",
+    data: {
+      isDropArea: true,
+    },
   });
   useDndMonitor({
     onDragEnd: ({ active, over }) => {
-      const isDropArea = over?.id === 'drop-area';
-      const isHandler = active.data.current?.isHandler;
+      const isDropArea = over?.id === "drop-area";
       const isDndElement = active.data.current?.isDndElement;
-      const DndElement = FormElements[active.data.current?.type];
-      if (isDndElement && isDropArea) {
-        addElement({ id: generateId(), element: DndElement });
+      const type = active.data.current?.type;
+      const DndElement = FormElements[type];
+      if (isDropArea && isDndElement && elements.length === 0) {
+        addElement({ element: { ...DndElement, id: generateId() } });
+        return;
+      }
+      if (isDropArea && isDndElement) {
+        addElement({
+          index: elements.length,
+          element: { ...DndElement, id: generateId() },
+        });
+        return;
       }
     },
   });
   return (
-    <div className="flex gap-5 justify-between w-full h-full  rounded-md">
-      <div className="w-[40%] h-screen overflow-hidden overflow-y-auto">
+    <div className="flex h-full w-full justify-between gap-5  rounded-md">
+      <div className="h-screen w-[40%] overflow-hidden overflow-y-auto">
         {/* Form Preview */}
         {elements?.length &&
-          elements.map(({ element: { formComponent: FormComponent } }) => (
+          elements.map(({ formComponent: FormComponent }) => (
             <div className="flex justify-between gap-3">
               <FormComponent />
             </div>
@@ -36,15 +47,15 @@ const Frame = () => {
       </div>
       <div
         ref={droppable.setNodeRef}
-        className="w-[60%] border border-rose-500 h-screen overflow-hidden overflow-y-auto"
+        className="h-screen w-[60%] overflow-hidden overflow-y-auto border border-rose-500"
       >
         {/* Form Builder */}
         {elements?.length &&
-          elements.map(({ element, id }, index) => {
+          elements.map((element, index) => {
             return (
               <FrameElement
-                id={id}
-                key={id}
+                id={element.id}
+                key={element.id}
                 element={element}
               />
             );

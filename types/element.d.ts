@@ -1,4 +1,4 @@
-type ElementType =
+export type ElementType =
   | 'Title'
   | 'Subtitle'
   | 'Separator'
@@ -13,11 +13,6 @@ type DndElementType = {
   type: ElementType;
   icon: LucideIcon;
   designComponent: React.FC<>;
-  modifyComponent: React.FC<PropertyProps>;
+  propertyComponent: React.FC<>;
   formComponent: React.FC<>;
 };
-
-export interface PropertyProps {
-  id: string;
-  selectedElement: SetStateAction<string>;
-}

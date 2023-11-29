@@ -24,8 +24,13 @@ const Form = () => {
   );
 };
 
-const Modify = () => {
-  return <div>Modify</div>;
+const Property = () => {
+  return (
+    <div className="w-24 p-4 rounded-md border border-slate-500 flex items-center justify-center gap-1 flex-col">
+      {Separator.type}
+      <Separator.icon />
+    </div>
+  );
 };
 
 const Separator: DndElementType = {
@@ -33,7 +38,7 @@ const Separator: DndElementType = {
   icon: Minus,
   designComponent: Design,
   formComponent: Form,
-  modifyComponent: Modify,
+  propertyComponent: Property,
 };
 
 export default Separator;

@@ -1,33 +1,34 @@
-'use client';
-import useDesign from '@/hooks/useDesign';
-import { cn } from '@/libs/utils';
-import { useDndMonitor, useDraggable } from '@dnd-kit/core';
-import { LucideIcon } from 'lucide-react';
+"use client";
+import useDesign from "@/hooks/useDesign";
+import useSelect from "@/hooks/useSelect";
+import { cn } from "@/libs/utils";
+import { DndElementType, ElementType } from "@/types/element";
+import { useDndMonitor, useDraggable } from "@dnd-kit/core";
+import { LucideIcon } from "lucide-react";
 
 interface DndElementProps {
   id: string;
-  name: string;
-  icon: LucideIcon;
+  property: React.FC;
 }
 
-const DndElement: React.FC<DndElementProps> = ({ id, name, icon: Icon }) => {
+const DndElement: React.FC<DndElementProps> = ({ id, property: Property }) => {
   const draggable = useDraggable({
-    id: id + 'dnd-element',
+    id: id + "dnd-element",
     data: {
       isDndElement: true,
       type: id,
     },
   });
-  const { selectedElement, setSelectedElement } = useDesign();
+  const { selectedElement, setSelectedElement } = useSelect();
 
   useDndMonitor({
     onDragStart: ({ active }) => {
-      const isDndElement = active.data.current?.isDndElement;
-
-      isDndElement && setSelectedElement(active.data.current?.type + '');
+      const isDndElement = active.data.current?.isDndElement as boolean;
+      const type = active.data.current?.type as ElementType;
+      isDndElement && setSelectedElement({ type, isDndElement });
     },
     onDragEnd: ({ active, over }) => {
-      setSelectedElement('');
+      setSelectedElement(null);
     },
   });
   return (
@@ -36,15 +37,15 @@ const DndElement: React.FC<DndElementProps> = ({ id, name, icon: Icon }) => {
       {...draggable.listeners}
       {...draggable.attributes}
       className={cn(
-        'w-24 p-4 rounded-md border border-slate-500 flex items-center justify-center gap-1 flex-col',
-        selectedElement === id ? 'opacity-60' : 'opacity-100',
+        selectedElement?.isDndElement && selectedElement.type
+          ? "opacity-60"
+          : "opacity-100",
       )}
       onClick={(e) => {
         e.stopPropagation();
       }}
     >
-      <Icon />
-      <span>{name}</span>
+      <Property />
     </div>
   );
 };

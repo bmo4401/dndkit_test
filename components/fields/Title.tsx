@@ -58,8 +58,13 @@ const Form = () => {
   );
 };
 
-const Modify = () => {
-  return <div>Modify</div>;
+const Property = () => {
+  return (
+    <div className="w-24 p-4 rounded-md border border-slate-500 flex items-center justify-center gap-1 flex-col">
+      {Title.type}
+      <Title.icon />
+    </div>
+  );
 };
 
 const Title: DndElementType = {
@@ -67,7 +72,7 @@ const Title: DndElementType = {
   icon: Heading1,
   designComponent: Design,
   formComponent: Form,
-  modifyComponent: Modify,
+  propertyComponent: Property,
 };
 
 export default Title;

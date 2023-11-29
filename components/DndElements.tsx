@@ -7,7 +7,6 @@ import Subtitle from '@/components/fields/Subtitle';
 import Text from '@/components/fields/Text';
 import TextArea from '@/components/fields/TextArea';
 import Title from '@/components/fields/Title';
-import { useDndMonitor } from '@dnd-kit/core';
 
 export const FormElements = {
   [Title.type]: Title,
@@ -33,8 +32,7 @@ const DndElements = () => {
           <DndElement
             key={item.type}
             id={item.type}
-            name={item.type}
-            icon={item.icon}
+            property={item.propertyComponent}
           />
         ))}
       </div>
