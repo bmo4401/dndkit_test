@@ -1,39 +1,43 @@
 "use client";
 import { FormElements } from "@/components/DndElements";
-import useSelect from "@/hooks/useSelect";
-import { DndElementType } from "@/types/element";
+import useDesign from "@/hooks/useDesign";
 import { DragOverlay, useDndMonitor } from "@dnd-kit/core";
 import { useState } from "react";
 
 const DndElementOverlay = () => {
-  const [activeElement, setActiveElement] = useState<DndElementType | null>(
-    null,
-  );
-  const { selectedElement } = useSelect();
+  const [node, setNode] = useState<any | null>(null);
+  const { removeElement } = useDesign();
   useDndMonitor({
-    onDragStart: (event) => {
-      console.log({ event });
+    onDragStart: ({ active }) => {
+      const isHandler = active.data.current?.isHandler;
+      const removeId = active.data.current?.id;
+      const isDndElement = active.data.current?.isDndElement;
+      const type = active.data.current?.type;
+      if (!isHandler && !isDndElement && !type) return;
+      let Node = null;
+      removeElement(removeId);
+      if (isHandler) {
+        Node =
+          FormElements[type].designOverlay ??
+          FormElements[type].designComponent;
+      }
+      if (isDndElement) {
+        Node = FormElements[type].propertyComponent;
+      }
+      setNode(Node);
     },
     onDragCancel: () => {
-      setActiveElement(null);
+      setNode(null);
     },
     onDragEnd: () => {
-      setActiveElement(null);
+      setNode(null);
     },
   });
-  if (!selectedElement) return;
-  const propertyOverlay =
-    selectedElement.isDndElement &&
-    FormElements[selectedElement.type].propertyComponent;
-  const designerOverlay =
-    selectedElement.isHandler &&
-    FormElements[selectedElement.type].designComponent;
-  const Overlay = (designerOverlay ?? propertyOverlay) as React.FC;
+  if (!node) return null;
+
   return (
     <DragOverlay>
-      <div className=" w-96">
-        <Overlay />
-      </div>
+      <div className="w-96">{node}</div>
     </DragOverlay>
   );
 };

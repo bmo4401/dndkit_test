@@ -49,19 +49,29 @@ const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
   useDndMonitor({
     onDragEnd: ({ active, over }) => {
       const type = active.data.current?.type;
+      const isHandler = active.data.current?.isHandler;
+
       const isTopHalf = over?.data.current?.isTopHalf;
       const isBottomHalf = over?.data.current?.isBottomHalf;
       let index = elements.findIndex((element) => element.id === id);
       const activeId = over?.data.current?.id;
+      const removeId = active.data.current?.id;
 
       isTopHalf && index;
       isBottomHalf && index++;
       /* Case 1: insert to top or bottom of existing element */
       if ((isTopHalf || isBottomHalf) && id === activeId) {
-        addElement({
-          index,
-          element: { ...FormElements[type], id: generateId() },
-        });
+        if (isHandler) {
+          addElement({
+            index,
+            element: { ...FormElements[type], id: removeId },
+          });
+        } else {
+          addElement({
+            index,
+            element: { ...FormElements[type], id: generateId() },
+          });
+        }
         return;
       }
     },

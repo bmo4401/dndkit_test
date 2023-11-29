@@ -2,7 +2,6 @@
 import DndElementOverlay from "@/components/overlay/DndElementOverlay";
 import {
   DndContext,
-  DragOverlay,
   MouseSensor,
   TouchSensor,
   useSensor,

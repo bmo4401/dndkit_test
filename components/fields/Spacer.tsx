@@ -46,6 +46,25 @@ const Design = () => {
     </div>
   );
 };
+const DesignOverlay = () => {
+  return (
+    <div className="flex h-24 w-full items-center justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
+      <div>
+        {" "}
+        <h2 className="w-10">{Spacer.type}</h2>
+      </div>
+
+      <div className="Spacer-slate-500 flex w-full select-none flex-col items-center justify-center gap-1 rounded-md">
+        <Spacer.icon size={40} />
+
+        <span className="flex w-fit items-center gap-2  hover:cursor-pointer hover:opacity-80">
+          <span className="text-slate-200">...px</span>
+        </span>
+      </div>
+    </div>
+  );
+};
+
 const Form = () => {
   return (
     <div className="flex h-24 w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
@@ -69,6 +88,7 @@ const Spacer: DndElementType = {
   type: "Spacer",
   icon: SeparatorHorizontal,
   designComponent: Design,
+  designOverlay: DesignOverlay,
   formComponent: Form,
   propertyComponent: Property,
 };
