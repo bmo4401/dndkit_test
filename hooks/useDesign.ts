@@ -16,7 +16,13 @@ interface State {
     element: SelectedElementType;
   }) => void;
   removeElement: (id: string) => void;
-  updateElement: (id: string, element: SelectedElementType) => void;
+  updateElement: ({
+    element,
+    id,
+  }: {
+    id: string;
+    element: SelectedElementType;
+  }) => void;
 }
 
 const useDesigner = create<State>((set, get) => ({
@@ -35,8 +41,6 @@ const useDesigner = create<State>((set, get) => ({
     element: SelectedElementType;
   }) => {
     if (index === -1) return;
-    console.log({ element });
-    console.log("❄️ ~ file: useDesign.ts:37 ~ index:", index);
     const newElements = [...get().elements];
     newElements.splice(index, 0, element);
     set((state) => ({
@@ -44,11 +48,18 @@ const useDesigner = create<State>((set, get) => ({
     }));
   },
   removeElement: (id: string) => {
+    console.log("❄️ ~ file: useDesign.ts:51 ~ id:", id);
     set((state) => ({
       elements: state.elements.filter((element) => element.id !== id),
     }));
   },
-  updateElement: (id: string, element: SelectedElementType) => {
+  updateElement: ({
+    id,
+    element,
+  }: {
+    id: string;
+    element: SelectedElementType;
+  }) => {
     const newElements = [...get().elements];
     const index = newElements.findIndex((el) => el.id === id);
     newElements[index] = element;

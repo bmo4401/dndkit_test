@@ -13,7 +13,7 @@ interface DndElementProps {
 
 const DndElement: React.FC<DndElementProps> = ({ id, property: Property }) => {
   const draggable = useDraggable({
-    id: id + "dnd-element",
+    id: id + "-dnd-element",
     data: {
       isDndElement: true,
       type: id,

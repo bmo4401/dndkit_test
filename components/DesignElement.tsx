@@ -14,13 +14,13 @@ interface DesignElementProps {
 }
 const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
   const { type, designComponent: DesignComponent } = element;
-  const { removeElement, addElement, elements } = useDesign();
+  const { removeElement, addElement, updateElement, elements } = useDesign();
   const { setSelectedElement } = useSelect();
   const draggable = useDraggable({
-    id: id + "-frame-element",
+    id: id + "-handler",
     data: {
       isHandler: true,
-      type: type,
+      type,
       id,
     },
   });
@@ -43,35 +43,39 @@ const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
     onDragEnd: ({ active, over }) => {
       const isDropArea = over?.id === "drop-area";
       const isHandler = active.data.current?.isHandler;
+
       const isDndElement = active.data.current?.isDndElement;
-      const type = active.data.current?.type;
-      /* Case 1: insert to top or bottom of existing element */
       const isTopHalf = over?.data.current?.isTopHalf;
       const isBottomHalf = over?.data.current?.isBottomHalf;
-      const activeId = over?.data.current?.id;
+      const type = active.data.current?.type;
       let index = elements.findIndex((element) => element.id === id);
-      /* increase index */
+      const activeId = over?.data.current?.id;
+      const removeId = active.data.current?.id;
+      if (isHandler) {
+        setSelectedElement({ type, isHandler });
+        removeElement(removeId);
+      }
       isTopHalf && index;
       isBottomHalf && index++;
+
+      /* Case 2: insert to top or bottom of existing element */
+      /* increase index */
       if ((isTopHalf || isBottomHalf) && id === activeId) {
+        if (isHandler) {
+          addElement({
+            index,
+            element: { ...FormElements[type], id: removeId },
+          });
+        }
         addElement({
           index,
           element: { ...FormElements[type], id: generateId() },
         });
         return;
       }
-      /* Case 2: insert to empty frame */
     },
   });
-  useDndMonitor({
-    onDragStart: ({ active }) => {
-      const isHandler = active.data.current?.isHandler;
-      const id = active.data.current?.id;
 
-      isHandler && removeElement(id);
-      setSelectedElement({ type, isHandler });
-    },
-  });
   return (
     <div className="flex justify-between gap-3">
       <div
@@ -83,24 +87,45 @@ const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
         {" "}
         <Menu />
       </div>
-      <div className="relative w-full border border-rose-500">
+      <div
+        className={cn(
+          "relative w-full border",
+          (topHalf.isOver || bottomHalf.isOver) && "opacity-80",
+        )}
+      >
         {" "}
         {/* top half */}
         <div
           ref={topHalf.setNodeRef}
           className={cn(
-            " absolute left-0 top-0 h-12 w-full rounded-md",
-            topHalf.isOver && " bg-rose-500",
+            " absolute  left-0  top-0  h-12 w-full rounded-md",
+            topHalf.isOver && "  z-10 bg-rose-500",
           )}
-        />
+        >
+          {topHalf.isOver && (
+            <h2 className="flex h-full items-center justify-center font-bold opacity-100">
+              Drop here
+            </h2>
+          )}
+        </div>
         <DesignComponent />
         <div
           ref={bottomHalf.setNodeRef}
           className={cn(
-            " absolute bottom-0 left-0 h-12 w-full rounded-md ",
-            bottomHalf.isOver && "bg-emerald-500",
+            " absolute bottom-0 left-0    h-12 w-full rounded-md",
+            bottomHalf.isOver && " bg-emerald-500 ",
           )}
-        />
+        >
+          {bottomHalf.isOver && (
+            <h2
+              className="
+          flex h-full items-center justify-center font-bold opacity-100
+          "
+            >
+              Drop here
+            </h2>
+          )}
+        </div>
       </div>
     </div>
   );
