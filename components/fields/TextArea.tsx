@@ -16,10 +16,13 @@ const Design = () => {
 };
 const Form = () => {
   return (
-    <div className="flex h-24 w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
-      <h2>{TextArea.type}</h2>
-
-      <div className="flex h-10 w-full items-center rounded-md border border-slate-500" />
+    <div className="mx-3 flex w-full py-2">
+      <textarea
+        rows={4}
+        cols={30}
+        className=" resize rounded-md border border-slate-500 bg-transparent outline-[1px] outline-white"
+        placeholder="Type here"
+      />
     </div>
   );
 };

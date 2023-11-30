@@ -16,13 +16,8 @@ interface State {
     element: SelectedElementType;
   }) => void;
   removeElement: (id: string) => void;
-  updateElement: ({
-    element,
-    id,
-  }: {
-    id: string;
-    element: SelectedElementType;
-  }) => void;
+  updateElement: ({ element }: { element: SelectedElementType }) => void;
+  clearElement: () => void;
 }
 
 const useDesigner = create<State>((set, get) => ({
@@ -42,6 +37,7 @@ const useDesigner = create<State>((set, get) => ({
   }) => {
     if (index === -1) return;
     const newElements = [...get().elements];
+    console.log("❄️ ~ file: useDesign.ts:41 ~ newElements:", newElements);
     newElements.splice(index, 0, element);
     set((state) => ({
       elements: newElements,
@@ -52,18 +48,18 @@ const useDesigner = create<State>((set, get) => ({
       elements: state.elements.filter((element) => element.id !== id),
     }));
   },
-  updateElement: ({
-    id,
-    element,
-  }: {
-    id: string;
-    element: SelectedElementType;
-  }) => {
+  updateElement: ({ element }: { element: SelectedElementType }) => {
     const newElements = [...get().elements];
-    const index = newElements.findIndex((el) => el.id === id);
+    const index = newElements.findIndex((el) => el.id === element.id);
     newElements[index] = element;
+    console.log(element);
     set((state) => ({
       elements: newElements,
+    }));
+  },
+  clearElement: () => {
+    set((state) => ({
+      elements: [],
     }));
   },
 }));

@@ -2,26 +2,23 @@
 
 import { FormElements } from "@/components/DndElements";
 import useDesign from "@/hooks/useDesign";
-import useSelect from "@/hooks/useSelect";
 import { cn, generateId } from "@/libs/utils";
 import { DndElementType, ElementType } from "@/types/element";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import { Menu } from "lucide-react";
 
-interface DesignElementProps {
+interface FrameElementProps {
   element: DndElementType;
   id: string;
 }
-type HandlerType = {
-  isHandler: boolean;
-  type: ElementType;
-  id: string;
-};
-const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
-  const { type, designComponent: DesignComponent } = element;
-  const { removeElement, addElement, updateElement, elements } = useDesign();
 
-  const { setSelectedElement } = useSelect();
+const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
+  const {
+    type,
+    designComponent: DesignComponent,
+    formComponent: FormComponent,
+  } = element;
+  const { addElement, removeElement, elements } = useDesign();
 
   const handlerDrag = useDraggable({
     id: id + "-handler",
@@ -62,6 +59,7 @@ const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
       /* Case 1: insert to top or bottom of existing element */
       if ((isTopHalf || isBottomHalf) && id === activeId) {
         if (isHandler) {
+          removeElement(removeId);
           addElement({
             index,
             element: { ...FormElements[type], id: removeId },
@@ -76,25 +74,26 @@ const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
       }
     },
   });
-
+  if (handlerDrag.isDragging) return null;
   return (
-    <div className="flex justify-between gap-3">
+    <div className="flex w-full justify-between  rounded-md  ">
       <div
         ref={handlerDrag.setNodeRef}
         {...handlerDrag.attributes}
         {...handlerDrag.listeners}
-        className="flex aspect-square h-24 items-center justify-center rounded-md border border-slate-500"
+        className="flex aspect-square h-24 items-center justify-center border border-slate-500"
       >
         {" "}
         <Menu />
       </div>
       <div
         className={cn(
-          "relative w-full border",
+          "relative w-full ",
           (topHalf.isOver || bottomHalf.isOver) && "opacity-80",
         )}
       >
         {" "}
+        <DesignComponent element={{ ...element, id }} />
         {/* top half */}
         <div
           ref={topHalf.setNodeRef}
@@ -110,7 +109,7 @@ const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
             </h2>
           )}
         </div>
-        <DesignComponent />
+        {/* top half */}
         <div
           ref={bottomHalf.setNodeRef}
           className={cn(
@@ -122,8 +121,8 @@ const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
           {bottomHalf.isOver && (
             <h2
               className="
-          flex h-full items-center justify-center font-bold opacity-100
-          "
+            flex h-full items-center justify-center font-bold opacity-100
+            "
             >
               Drop here
             </h2>
@@ -134,4 +133,4 @@ const DesignElement: React.FC<DesignElementProps> = ({ element, id }) => {
   );
 };
 
-export default DesignElement;
+export default FrameElement;

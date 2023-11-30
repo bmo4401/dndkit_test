@@ -6,16 +6,13 @@ import { useState } from "react";
 
 const DndElementOverlay = () => {
   const [node, setNode] = useState<any | null>(null);
-  const { removeElement } = useDesign();
   useDndMonitor({
     onDragStart: ({ active }) => {
       const isHandler = active.data.current?.isHandler;
-      const removeId = active.data.current?.id;
       const isDndElement = active.data.current?.isDndElement;
       const type = active.data.current?.type;
       if (!isHandler && !isDndElement && !type) return;
       let Node = null;
-      removeElement(removeId);
       if (isHandler) {
         Node =
           FormElements[type].designOverlay ??

@@ -1,16 +1,12 @@
 "use client";
-import { FormElements, FormElementsList } from "@/components/DndElements";
-import FrameElement from "@/components/DesignElement";
+import { FormElements } from "@/components/DndElements";
+import DesignElement from "@/components/FrameElement";
 import useDesign from "@/hooks/useDesign";
 import { generateId } from "@/libs/utils";
-import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
-import { Menu } from "lucide-react";
-import { useState } from "react";
-import useSelect from "@/hooks/useSelect";
+import { useDndMonitor, useDroppable } from "@dnd-kit/core";
 
 const Frame = () => {
   const { elements, addElement } = useDesign();
-  const { selectedElement } = useSelect();
   const droppable = useDroppable({
     id: "-drop-area",
     data: {
@@ -39,31 +35,33 @@ const Frame = () => {
     },
   });
   return (
-    <div className="flex h-full w-full justify-between gap-5  rounded-md">
+    <div className="flex h-full w-full justify-between rounded-md">
       <div className="h-screen w-[40%] overflow-hidden overflow-y-auto">
-        {/* Form Preview */}
         {elements?.length &&
-          elements.map(({ formComponent: FormComponent }) => (
-            <div className="flex justify-between gap-3">
-              <FormComponent />
+          elements.map((element) => (
+            <div className="flex justify-between gap-2">
+              <element.formComponent element={element} />
             </div>
           ))}
       </div>
       <div
         ref={droppable.setNodeRef}
-        className="h-screen w-[60%] overflow-hidden overflow-y-auto border border-rose-500"
+        className="h-screen w-[60%]  overflow-hidden overflow-y-auto border "
       >
         {/* Form Builder */}
-        {elements?.length &&
+        {elements?.length ? (
           elements.map((element, index) => {
             return (
-              <FrameElement
+              <DesignElement
                 id={element.id}
                 key={element.id}
                 element={element}
               />
             );
-          })}
+          })
+        ) : (
+          <h2>Not thing here</h2>
+        )}
       </div>
     </div>
   );

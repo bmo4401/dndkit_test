@@ -1,24 +1,35 @@
 "use client";
-import { generateId } from "@/libs/utils";
+import useDesign, { SelectedElementType } from "@/hooks/useDesign";
 import { DndElementType } from "@/types/element";
 import { Heading1 } from "lucide-react";
 import { useState } from "react";
 
-const Design = () => {
+interface DesignProps {
+  element: SelectedElementType;
+}
+
+const Design: React.FC<DesignProps> = ({ element }) => {
+  const { updateElement } = useDesign();
   const [mode, setMode] = useState(false);
-  const [input, setInput] = useState("");
-  const [isRequired, setIsRequired] = useState(false);
+  const [input, setInput] = useState(element.attribute.input);
+  const [isRequired, setIsRequired] = useState(element.attribute.isRequired);
+  const update = () => {
+    updateElement({
+      element: { ...element, attribute: { input, isRequired } },
+    });
+    setMode(!mode);
+  };
   return (
     <div className="group relative  flex h-24 w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
       {mode ? (
-        <div className="flex gap-5">
+        <div className="h-fit w-full  gap-5  ">
           <input
             value={input ?? ""}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
-              e.key === "Enter" && setMode((prev) => !prev);
+              e.key === "Enter" && update();
             }}
-            className="w-full bg-transparent text-white outline-none"
+            className="w-1/2 bg-transparent text-white outline-none"
             placeholder={Title.type}
             autoComplete="off"
             autoFocus
@@ -28,33 +39,49 @@ const Design = () => {
             id="required"
             type="checkbox"
             checked={isRequired}
-            onChange={() => setIsRequired((prev) => !prev)}
+            onChange={() => setIsRequired(!isRequired)}
           />
-          <label htmlFor="required">Required</label>
+          <label htmlFor="required" className="pl-2">
+            Required
+          </label>
         </div>
       ) : (
         <span
           className="flex w-full items-center gap-2 hover:cursor-pointer hover:opacity-80"
-          onDoubleClick={() => setMode((prev) => !prev)}
+          onDoubleClick={() => setMode(!mode)}
         >
           <span> {input.length !== 0 ? input : Title.type}</span>
           {isRequired && <span className="text-rose-500">*</span>}
         </span>
       )}
 
-      <div className="flex h-10 w-full select-none items-center rounded-md text-slate-500">
+      <div
+        onClick={() => {
+          if (mode) {
+            update();
+            setMode(!mode);
+          }
+        }}
+        className="flex h-10 w-full select-none items-center rounded-md text-slate-500"
+      >
         {Title.type} will display here.
       </div>
     </div>
   );
 };
-const Form = () => {
+interface FormProps {
+  element: SelectedElementType;
+}
+const Form: React.FC<FormProps> = ({ element }) => {
+  const { input, isRequired } = element.attribute;
   return (
-    <div className="flex h-24 w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
-      <h2>{Title.type}</h2>
-
-      <div className="flex h-10 w-full items-center rounded-md border border-slate-500" />
-    </div>
+    <span className="flex  items-center gap-2 px-3 py-1">
+      <span className="leading-none">
+        {" "}
+        {input.length !== 0 ? input : Title.type}
+      </span>
+      {isRequired && <span className="leading-none text-rose-500">*</span>}
+    </span>
   );
 };
 
@@ -84,6 +111,10 @@ const Property = () => {
 const Title: DndElementType = {
   type: "Title",
   icon: Heading1,
+  attribute: {
+    input: "",
+    isRequired: false,
+  },
   designComponent: Design,
   designOverlay: DesignOverlay,
   formComponent: Form,

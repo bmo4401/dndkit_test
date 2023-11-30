@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import DndElement from '@/components/DndElement';
-import Separator from '@/components/fields/Separator';
-import Spacer from '@/components/fields/Spacer';
-import Subtitle from '@/components/fields/Subtitle';
-import Text from '@/components/fields/Text';
-import TextArea from '@/components/fields/TextArea';
-import Title from '@/components/fields/Title';
+import DndElement from "@/components/DndElement";
+import Separator from "@/components/fields/Separator";
+import Spacer from "@/components/fields/Spacer";
+import Subtitle from "@/components/fields/Subtitle";
+import Text from "@/components/fields/Text";
+import TextArea from "@/components/fields/TextArea";
+import Title from "@/components/fields/Title";
 
 export const FormElements = {
   [Title.type]: Title,
@@ -26,8 +26,8 @@ export const FormElementsList = [
 ];
 const DndElements = () => {
   return (
-    <div className="w-1/3 flex flex-col">
-      <div className=" flex-wrap flex  border border-rose-500 rounded-md">
+    <div className="flex w-1/3 flex-col">
+      <div className=" flex flex-wrap  rounded-md border border-rose-500">
         {FormElementsList.map((item) => (
           <DndElement
             key={item.type}
@@ -36,7 +36,7 @@ const DndElements = () => {
           />
         ))}
       </div>
-      <div className=" flex-wrap border flex border-rose-500 rounded-md">
+      <div className=" flex flex-wrap rounded-md border border-rose-500">
         {/*    {list2.map((item) => (
           <DndElement
             key={`${item.id}-list2`}

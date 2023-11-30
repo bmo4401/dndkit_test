@@ -19,28 +19,12 @@ const DndElement: React.FC<DndElementProps> = ({ id, property: Property }) => {
       type: id,
     },
   });
-  const { selectedElement, setSelectedElement } = useSelect();
-
-  useDndMonitor({
-    onDragStart: ({ active }) => {
-      const isDndElement = active.data.current?.isDndElement as boolean;
-      const type = active.data.current?.type as ElementType;
-      isDndElement && setSelectedElement({ type, isDndElement });
-    },
-    onDragEnd: ({ active, over }) => {
-      setSelectedElement(null);
-    },
-  });
   return (
     <div
       ref={draggable.setNodeRef}
       {...draggable.listeners}
       {...draggable.attributes}
-      className={cn(
-        selectedElement?.isDndElement && selectedElement.type === id
-          ? "opacity-60"
-          : "opacity-100",
-      )}
+      className={cn(draggable.isDragging && "opacity-60")}
     >
       <Property />
     </div>

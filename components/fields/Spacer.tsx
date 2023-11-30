@@ -1,11 +1,22 @@
 "use client";
+import useDesign, { SelectedElementType } from "@/hooks/useDesign";
+import { cn } from "@/libs/utils";
 import { DndElementType } from "@/types/element";
 import { SeparatorHorizontal } from "lucide-react";
 import { useState } from "react";
-
-const Design = () => {
+interface DesignProps {
+  element: SelectedElementType;
+}
+const Design: React.FC<DesignProps> = ({ element }) => {
+  const { updateElement } = useDesign();
   const [mode, setMode] = useState(false);
-  const [spacer, setSpacer] = useState(5);
+  const [space, setSpace] = useState(5);
+  const update = () => {
+    updateElement({
+      element: { ...element, attribute: { space } },
+    });
+    setMode(!mode);
+  };
   return (
     <div className="flex h-24 w-full items-center justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
       <div>
@@ -18,14 +29,15 @@ const Design = () => {
         {mode ? (
           <div className="w-fit overflow-hidden">
             <input
-              value={spacer ?? ""}
-              onChange={(e) => setSpacer(+e.target.value)}
+              value={space ?? ""}
+              onChange={(e) => setSpace(+e.target.value)}
               onKeyDown={(e) => {
-                e.key === "Enter" && setMode((prev) => !prev);
+                e.key === "Enter" && update();
               }}
+              onBlur={() => update()}
               className="hidden-control  bg-transparent outline-none"
               placeholder={Spacer.type}
-              style={{ width: (spacer + "").length * 10 }}
+              style={{ width: (space + "").length * 10 }}
               autoComplete="off"
               type="number"
               autoFocus
@@ -39,7 +51,7 @@ const Design = () => {
               setMode((prev) => !prev);
             }}
           >
-            <span className="text-slate-200">{spacer} px</span>
+            <span className="text-slate-200">{space} px</span>
           </span>
         )}
       </div>
@@ -64,14 +76,16 @@ const DesignOverlay = () => {
     </div>
   );
 };
-
-const Form = () => {
+interface FormProps {
+  element: SelectedElementType;
+}
+const Form: React.FC<FormProps> = ({ element }) => {
+  const { space } = element.attribute;
   return (
-    <div className="flex h-24 w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
-      <h2>{Spacer.type}</h2>
-
-      <div className="flex h-10 w-full items-center rounded-md border border-slate-500" />
-    </div>
+    <div
+      className={cn("ml-3 h-fit w-full")}
+      style={{ paddingTop: space, paddingBottom: space }}
+    />
   );
 };
 
@@ -87,6 +101,9 @@ const Property = () => {
 const Spacer: DndElementType = {
   type: "Spacer",
   icon: SeparatorHorizontal,
+  attribute: {
+    space: 5,
+  },
   designComponent: Design,
   designOverlay: DesignOverlay,
   formComponent: Form,
