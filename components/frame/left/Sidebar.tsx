@@ -1,5 +1,6 @@
-'use client';
+"use client";
 
+<<<<<<< HEAD:components/frame/left/Sidebar.tsx
 import DndElement from '@/components/frame/left/DndElement';
 import Separator from '@/components/fields/Separator';
 import Spacer from '@/components/fields/Spacer';
@@ -8,6 +9,15 @@ import Text from '@/components/fields/Text';
 import TextArea from '@/components/fields/TextArea';
 import Title from '@/components/fields/Title';
 import { useDndMonitor } from '@dnd-kit/core';
+=======
+import DndElement from "@/components/DndElement";
+import Separator from "@/components/fields/Separator";
+import Spacer from "@/components/fields/Spacer";
+import Subtitle from "@/components/fields/Subtitle";
+import Text from "@/components/fields/Text";
+import TextArea from "@/components/fields/TextArea";
+import Title from "@/components/fields/Title";
+>>>>>>> fa69727340bcdf3fc14d5656d98c66e1ed006c25:components/DndElements.tsx
 
 export const FormElements = {
   [Title.type]: Title,
@@ -27,18 +37,17 @@ export const FormElementsList = [
 ];
 const DndElements = () => {
   return (
-    <div className="w-1/3 flex flex-col">
-      <div className=" flex-wrap flex  border border-rose-500 rounded-md">
+    <div className="flex w-1/3 flex-col">
+      <div className=" flex flex-wrap  rounded-md border border-rose-500">
         {FormElementsList.map((item) => (
           <DndElement
             key={item.type}
             id={item.type}
-            name={item.type}
-            icon={item.icon}
+            property={item.propertyComponent}
           />
         ))}
       </div>
-      <div className=" flex-wrap border flex border-rose-500 rounded-md">
+      <div className=" flex flex-wrap rounded-md border border-rose-500">
         {/*    {list2.map((item) => (
           <DndElement
             key={`${item.id}-list2`}

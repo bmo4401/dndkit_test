@@ -1,39 +1,38 @@
-'use client';
-import { DndElementType } from '@/types/element';
-import { Minus, SeparatorHorizontal } from 'lucide-react';
-import { useState } from 'react';
+"use client";
+import { DndElementType } from "@/types/element";
+import { Minus, SeparatorHorizontal } from "lucide-react";
+import { useState } from "react";
 
 const Design = () => {
   return (
-    <div className="w-full h-24 border border-slate-500 rounded-md flex justify-center px-6 py-3 gap-3 items-center">
+    <div className="flex h-24 w-full items-center justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
       <h2 className="w-10">{Separator.type}</h2>
 
-      <div className="flex rounded-md w-full  select-none justify-center">
+      <div className="flex w-full select-none  justify-center rounded-md">
         <Separator.icon size={40} />
       </div>
     </div>
   );
 };
 const Form = () => {
-  return (
-    <div className="w-full h-24 border border-slate-500 rounded-md flex flex-col justify-center px-6 py-3 gap-3 items-start">
-      <h2>{Separator.type}</h2>
+  return <div className="my-3 h-[1px] w-full bg-slate-500" />;
+};
 
-      <div className="border border-slate-500 rounded-md w-full h-10 flex items-center justify-center" />
+const Property = () => {
+  return (
+    <div className="flex w-24 flex-col items-center justify-center gap-1 rounded-md border border-slate-500 p-4">
+      {Separator.type}
+      <Separator.icon />
     </div>
   );
 };
 
-const Modify = () => {
-  return <div>Modify</div>;
-};
-
 const Separator: DndElementType = {
-  type: 'Separator',
+  type: "Separator",
   icon: Minus,
   designComponent: Design,
   formComponent: Form,
-  modifyComponent: Modify,
+  propertyComponent: Property,
 };
 
 export default Separator;

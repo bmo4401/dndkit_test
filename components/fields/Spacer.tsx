@@ -1,31 +1,43 @@
-'use client';
-import { DndElementType } from '@/types/element';
-import { SeparatorHorizontal } from 'lucide-react';
-import { useState } from 'react';
-
-const Design = () => {
+"use client";
+import useDesign, { SelectedElementType } from "@/hooks/useDesign";
+import { cn } from "@/libs/utils";
+import { DndElementType } from "@/types/element";
+import { SeparatorHorizontal } from "lucide-react";
+import { useState } from "react";
+interface DesignProps {
+  element: SelectedElementType;
+}
+const Design: React.FC<DesignProps> = ({ element }) => {
+  const { updateElement } = useDesign();
   const [mode, setMode] = useState(false);
-  const [spacer, setSpacer] = useState(5);
+  const [space, setSpace] = useState(5);
+  const update = () => {
+    updateElement({
+      element: { ...element, attribute: { space } },
+    });
+    setMode(!mode);
+  };
   return (
-    <div className="w-full h-24 border border-slate-500 rounded-md flex justify-center px-6 py-3 gap-3 items-center">
+    <div className="flex h-24 w-full items-center justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
       <div>
-        {' '}
+        {" "}
         <h2 className="w-10">{Spacer.type}</h2>
       </div>
 
-      <div className="justify-center rounded-md w-full flex items-center select-none Spacer-slate-500 gap-1 flex-col">
+      <div className="Spacer-slate-500 flex w-full select-none flex-col items-center justify-center gap-1 rounded-md">
         <Spacer.icon size={40} />
         {mode ? (
           <div className="w-fit overflow-hidden">
             <input
-              value={spacer ?? ''}
-              onChange={(e) => setSpacer(+e.target.value)}
+              value={space ?? ""}
+              onChange={(e) => setSpace(+e.target.value)}
               onKeyDown={(e) => {
-                e.key === 'Enter' && setMode((prev) => !prev);
+                e.key === "Enter" && update();
               }}
+              onBlur={() => update()}
               className="hidden-control  bg-transparent outline-none"
               placeholder={Spacer.type}
-              style={{ width: (spacer + '').length * 10 }}
+              style={{ width: (space + "").length * 10 }}
               autoComplete="off"
               type="number"
               autoFocus
@@ -34,36 +46,68 @@ const Design = () => {
           </div>
         ) : (
           <span
-            className="w-fit flex gap-2 items-center hover:cursor-pointer hover:opacity-80"
-            onDoubleClick={() => setMode((prev) => !prev)}
+            className="flex w-fit items-center gap-2  hover:cursor-pointer hover:opacity-80"
+            onDoubleClick={() => {
+              setMode((prev) => !prev);
+            }}
           >
-            <span className="text-slate-200">{spacer} px</span>
+            <span className="text-slate-200">{space} px</span>
           </span>
         )}
       </div>
     </div>
   );
 };
-const Form = () => {
+const DesignOverlay = () => {
   return (
-    <div className="w-full h-24 border border-slate-500 rounded-md flex flex-col justify-center px-6 py-3 gap-3 items-start">
-      <h2>{Spacer.type}</h2>
+    <div className="flex h-24 w-full items-center justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
+      <div>
+        {" "}
+        <h2 className="w-10">{Spacer.type}</h2>
+      </div>
 
-      <div className="border border-slate-500 rounded-md w-full h-10 flex items-center" />
+      <div className="Spacer-slate-500 flex w-full select-none flex-col items-center justify-center gap-1 rounded-md">
+        <Spacer.icon size={40} />
+
+        <span className="flex w-fit items-center gap-2  hover:cursor-pointer hover:opacity-80">
+          <span className="text-slate-200">...px</span>
+        </span>
+      </div>
+    </div>
+  );
+};
+interface FormProps {
+  element: SelectedElementType;
+}
+const Form: React.FC<FormProps> = ({ element }) => {
+  const { space } = element.attribute;
+  return (
+    <div
+      className={cn("ml-3 h-fit w-full")}
+      style={{ paddingTop: space, paddingBottom: space }}
+    />
+  );
+};
+
+const Property = () => {
+  return (
+    <div className="flex w-24 flex-col items-center justify-center gap-1 rounded-md border border-slate-500 p-4">
+      {Spacer.type}
+      <Spacer.icon />
     </div>
   );
 };
 
-const Modify = () => {
-  return <div>Modify</div>;
-};
-
 const Spacer: DndElementType = {
-  type: 'Spacer',
+  type: "Spacer",
   icon: SeparatorHorizontal,
+  attribute: {
+    space: 5,
+  },
   designComponent: Design,
+  designOverlay: DesignOverlay,
   formComponent: Form,
-  modifyComponent: Modify,
+  propertyComponent: Property,
 };
 
 export default Spacer;

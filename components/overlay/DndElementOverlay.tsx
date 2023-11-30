@@ -1,19 +1,45 @@
+<<<<<<< HEAD
 import { FormElements } from '@/components/frame/left/Sidebar';
 import useDesign from '@/hooks/useDesign';
+"use client";
+import { FormElements } from "@/components/DndElements";
+import useDesign from "@/hooks/useDesign";
+import { DragOverlay, useDndMonitor } from "@dnd-kit/core";
+import { useState } from "react";
+>>>>>>> fa69727340bcdf3fc14d5656d98c66e1ed006c25
 
 const DndElementOverlay = () => {
-  const { selectedElement } = useDesign();
-  console.log(
-    '❄️ ~ file: DndElementOverlay.tsx:6 ~ selectedElement:',
-    selectedElement,
-  );
+  const [node, setNode] = useState<any | null>(null);
+  useDndMonitor({
+    onDragStart: ({ active }) => {
+      const isHandler = active.data.current?.isHandler;
+      const isDndElement = active.data.current?.isDndElement;
+      const type = active.data.current?.type;
+      if (!isHandler && !isDndElement && !type) return;
+      let Node = null;
+      if (isHandler) {
+        Node =
+          FormElements[type].designOverlay ??
+          FormElements[type].designComponent;
+      }
+      if (isDndElement) {
+        Node = FormElements[type].propertyComponent;
+      }
+      setNode(Node);
+    },
+    onDragCancel: () => {
+      setNode(null);
+    },
+    onDragEnd: () => {
+      setNode(null);
+    },
+  });
+  if (!node) return null;
 
-  if (!selectedElement) return;
-  const OverLay = FormElements[selectedElement].designComponent;
   return (
-    <div className=" w-96">
-      <OverLay />
-    </div>
+    <DragOverlay>
+      <div className="w-96">{node}</div>
+    </DragOverlay>
   );
 };
 export default DndElementOverlay;

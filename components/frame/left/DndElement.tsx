@@ -1,33 +1,22 @@
-'use client';
-import useDesign from '@/hooks/useDesign';
-import { cn } from '@/libs/utils';
-import { useDndMonitor, useDraggable } from '@dnd-kit/core';
-import { LucideIcon } from 'lucide-react';
+"use client";
+import useDesign from "@/hooks/useDesign";
+import useSelect from "@/hooks/useSelect";
+import { cn } from "@/libs/utils";
+import { DndElementType, ElementType } from "@/types/element";
+import { useDndMonitor, useDraggable } from "@dnd-kit/core";
+import { LucideIcon } from "lucide-react";
 
 interface DndElementProps {
   id: string;
-  name: string;
-  icon: LucideIcon;
+  property: React.FC;
 }
 
-const DndElement: React.FC<DndElementProps> = ({ id, name, icon: Icon }) => {
+const DndElement: React.FC<DndElementProps> = ({ id, property: Property }) => {
   const draggable = useDraggable({
-    id: id + 'dnd-element',
+    id: id + "-dnd-element",
     data: {
       isDndElement: true,
       type: id,
-    },
-  });
-  const { selectedElement, setSelectedElement } = useDesign();
-
-  useDndMonitor({
-    onDragStart: ({ active }) => {
-      const isDndElement = active.data.current?.isDndElement;
-
-      isDndElement && setSelectedElement(active.data.current?.type + '');
-    },
-    onDragEnd: ({ active, over }) => {
-      setSelectedElement('');
     },
   });
   return (
@@ -35,16 +24,9 @@ const DndElement: React.FC<DndElementProps> = ({ id, name, icon: Icon }) => {
       ref={draggable.setNodeRef}
       {...draggable.listeners}
       {...draggable.attributes}
-      className={cn(
-        'w-24 p-4 rounded-md border border-slate-500 flex items-center justify-center gap-1 flex-col',
-        selectedElement === id ? 'opacity-60' : 'opacity-100',
-      )}
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
+      className={cn(draggable.isDragging && "opacity-60")}
     >
-      <Icon />
-      <span>{name}</span>
+      <Property />
     </div>
   );
 };

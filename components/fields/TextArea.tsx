@@ -1,14 +1,14 @@
-'use client';
-import { DndElementType } from '@/types/element';
-import { Baseline, Heading, Pencil, X } from 'lucide-react';
-import { useState } from 'react';
+"use client";
+import { DndElementType } from "@/types/element";
+import { Baseline, Heading, Pencil, X } from "lucide-react";
+import { useState } from "react";
 
 const Design = () => {
   return (
-    <div className="w-full h-24 border border-slate-500 rounded-md flex flex-col justify-center px-6 py-3 gap-3 items-start">
+    <div className="flex h-24 w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
       <h2>{TextArea.type}</h2>
 
-      <div className="justify-center rounded-md w-full h-10 flex items-center select-none text-slate-500">
+      <div className="flex h-10 w-full select-none items-center justify-center rounded-md text-slate-500">
         {TextArea.type} will display here
       </div>
     </div>
@@ -16,24 +16,32 @@ const Design = () => {
 };
 const Form = () => {
   return (
-    <div className="w-full h-24 border border-slate-500 rounded-md flex flex-col justify-center px-6 py-3 gap-3 items-start">
-      <h2>{TextArea.type}</h2>
-
-      <div className="border border-slate-500 rounded-md w-full h-10 flex items-center" />
+    <div className="mx-3 flex w-full py-2">
+      <textarea
+        rows={4}
+        cols={30}
+        className=" resize rounded-md border border-slate-500 bg-transparent outline-[1px] outline-white"
+        placeholder="Type here"
+      />
     </div>
   );
 };
 
-const Modify = () => {
-  return <div>Modify</div>;
+const Property = () => {
+  return (
+    <div className="flex w-24 flex-col items-center justify-center gap-1 rounded-md border border-slate-500 p-4">
+      {TextArea.type}
+      <TextArea.icon />
+    </div>
+  );
 };
 
 const TextArea: DndElementType = {
-  type: 'TextArea',
+  type: "TextArea",
   icon: Baseline,
   designComponent: Design,
   formComponent: Form,
-  modifyComponent: Modify,
+  propertyComponent: Property,
 };
 
 export default TextArea;
