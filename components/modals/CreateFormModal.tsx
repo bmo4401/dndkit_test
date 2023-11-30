@@ -1,56 +1,60 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { Button, Modal } from "antd";
-
+import { Button as ButtonCustom } from "@/components/ui/Button";
+import { createForm } from "@/actions/form";
+import { useFormStatus } from "react-dom";
 const CreateFormModal = () => {
   const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
+  const { pending } = useFormStatus();
 
   const showModal = () => {
     setOpen(true);
   };
 
-  const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
   };
-  const handleForm = () => {
-    console.log("submit");
+  const handleForm = async (formData: FormData) => {
+    const input = formData.get("name") as string;
+    await createForm(input);
+    setOpen(false);
   };
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button
+        type="primary"
+        onClick={showModal}
+        className="flex w-full justify-center"
+      >
         Create New
       </Button>
       <Modal
         title="Create Form"
         open={open}
-        confirmLoading={confirmLoading}
+        confirmLoading={pending}
         onCancel={handleCancel}
-        className="bg-transparent"
+        footer={null} //hidden button
       >
-        <form action={handleForm}>
+        <form action={handleForm} className=" flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <label htmlFor="name">Name</label>
             <input
               id="name"
-              type={"name"}
-              className="rounded-md border border-slate-500"
+              type={"text"}
+              name="name"
+              className="focus:outline-primary h-8 rounded-md border border-slate-500"
             />
           </div>
 
-          <button type="submit">Save</button>
+          <ButtonCustom
+            disabled={pending}
+            type="submit"
+            className="gradient-button w-fit self-end border-none text-white outline-none"
+          >
+            Save
+          </ButtonCustom>
         </form>
       </Modal>
     </>
