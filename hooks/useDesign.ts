@@ -1,8 +1,6 @@
 import { DndElementType } from "@/types/element";
-import { Dispatch, SetStateAction } from "react";
 import { create } from "zustand";
 export type SelectedElementType = DndElementType & { id: string };
-
 interface State {
   elements: SelectedElementType[] | [];
 
@@ -37,7 +35,6 @@ const useDesigner = create<State>((set, get) => ({
   }) => {
     if (index === -1) return;
     const newElements = [...get().elements];
-    console.log("❄️ ~ file: useDesign.ts:41 ~ newElements:", newElements);
     newElements.splice(index, 0, element);
     set((state) => ({
       elements: newElements,

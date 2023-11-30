@@ -1,6 +1,5 @@
 "use client";
 
-<<<<<<< HEAD:components/frame/left/Sidebar.tsx
 import DndElement from '@/components/frame/left/DndElement';
 import Separator from '@/components/fields/Separator';
 import Spacer from '@/components/fields/Spacer';
@@ -8,16 +7,7 @@ import Subtitle from '@/components/fields/Subtitle';
 import Text from '@/components/fields/Text';
 import TextArea from '@/components/fields/TextArea';
 import Title from '@/components/fields/Title';
-import { useDndMonitor } from '@dnd-kit/core';
-=======
-import DndElement from "@/components/DndElement";
-import Separator from "@/components/fields/Separator";
-import Spacer from "@/components/fields/Spacer";
-import Subtitle from "@/components/fields/Subtitle";
-import Text from "@/components/fields/Text";
-import TextArea from "@/components/fields/TextArea";
-import Title from "@/components/fields/Title";
->>>>>>> fa69727340bcdf3fc14d5656d98c66e1ed006c25:components/DndElements.tsx
+
 
 export const FormElements = {
   [Title.type]: Title,

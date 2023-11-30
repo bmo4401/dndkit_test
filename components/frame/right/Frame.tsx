@@ -1,18 +1,9 @@
-<<<<<<< HEAD:components/frame/right/Frame.tsx
-'use client';
-import { FormElements } from '@/components/frame/left/Sidebar';
-import FrameElement from '@/components/frame/right/FrameElement';
-import useDesign from '@/hooks/useDesign';
-import { generateId } from '@/libs/utils';
-import { useDndMonitor, useDroppable } from '@dnd-kit/core';
-=======
 "use client";
-import { FormElements } from "@/components/DndElements";
-import DesignElement from "@/components/FrameElement";
+import { FormElements } from "@/components/frame/left/Sidebar";
+import FrameElement from "@/components/frame/right/FrameElement";
 import useDesign from "@/hooks/useDesign";
 import { generateId } from "@/libs/utils";
 import { useDndMonitor, useDroppable } from "@dnd-kit/core";
->>>>>>> fa69727340bcdf3fc14d5656d98c66e1ed006c25:components/Frame.tsx
 
 const Frame = () => {
   const { elements, addElement } = useDesign();
@@ -61,7 +52,7 @@ const Frame = () => {
         {elements?.length ? (
           elements.map((element, index) => {
             return (
-              <DesignElement
+              <FrameElement
                 id={element.id}
                 key={element.id}
                 element={element}

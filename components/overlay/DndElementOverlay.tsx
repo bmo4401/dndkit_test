@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-import { FormElements } from '@/components/frame/left/Sidebar';
-import useDesign from '@/hooks/useDesign';
-"use client";
-import { FormElements } from "@/components/DndElements";
-import useDesign from "@/hooks/useDesign";
+'use client'
+import { FormElements } from "@/components/frame/left/Sidebar";
 import { DragOverlay, useDndMonitor } from "@dnd-kit/core";
 import { useState } from "react";
->>>>>>> fa69727340bcdf3fc14d5656d98c66e1ed006c25
 
 const DndElementOverlay = () => {
   const [node, setNode] = useState<any | null>(null);

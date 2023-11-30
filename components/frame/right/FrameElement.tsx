@@ -1,6 +1,6 @@
 "use client";
 
-import { FormElements } from "@/components/DndElements";
+import { FormElements } from "@/components/frame/left/Sidebar";
 import useDesign from "@/hooks/useDesign";
 import { cn, generateId } from "@/libs/utils";
 import { DndElementType, ElementType } from "@/types/element";
@@ -99,7 +99,7 @@ const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
           ref={topHalf.setNodeRef}
           className={cn(
             " absolute  left-0 top-0   h-12 w-full rounded-md",
-            topHalf.isOver && "z-10   bg-rose-500",
+            topHalf.isOver && "z-10 bg-emerald-500  ",
             topHalf.isOver ? "z-10" : "z-[-10]",
           )}
         >
@@ -114,7 +114,7 @@ const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
           ref={bottomHalf.setNodeRef}
           className={cn(
             " absolute bottom-0 left-0    h-12 w-full rounded-md",
-            bottomHalf.isOver && " bg-emerald-500 ",
+            bottomHalf.isOver && " bg-rose-500 ",
             bottomHalf.isOver ? "z-10" : "z-[-10]",
           )}
         >

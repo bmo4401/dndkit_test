@@ -22,7 +22,7 @@ const CreateFormModal = () => {
   };
 
   return (
-    <>
+    <div className="w-fit">
       <Button
         type="primary"
         onClick={showModal}
@@ -44,7 +44,7 @@ const CreateFormModal = () => {
               id="name"
               type={"text"}
               name="name"
-              className="focus:outline-primary h-8 rounded-md border border-slate-500"
+              className="h-8 rounded-md border border-slate-500 focus:outline-primary"
             />
           </div>
 
@@ -57,7 +57,7 @@ const CreateFormModal = () => {
           </ButtonCustom>
         </form>
       </Modal>
-    </>
+    </div>
   );
 };
 

@@ -1,10 +1,6 @@
 "use client";
-import useDesign from "@/hooks/useDesign";
-import useSelect from "@/hooks/useSelect";
 import { cn } from "@/libs/utils";
-import { DndElementType, ElementType } from "@/types/element";
-import { useDndMonitor, useDraggable } from "@dnd-kit/core";
-import { LucideIcon } from "lucide-react";
+import { useDraggable } from "@dnd-kit/core";
 
 interface DndElementProps {
   id: string;

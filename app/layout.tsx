@@ -19,7 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn(inter.className, " h-screen w-screen overflow-hidden")}
+        className={cn(
+          inter.className,
+          "h-screen w-screen overflow-hidden bg-black text-white",
+        )}
       >
         <ContextProvider> {children}</ContextProvider>
       </body>
