@@ -1,5 +1,5 @@
-import DndElements from '@/components/DndElements';
-import Frame from '@/components/Frame';
+import DndElements from '@/components/frame/left/Sidebar';
+import Frame from '@/components/frame/right/Frame';
 import DndProvider from '@/providers/DndProvider';
 
 const DndContainer = () => {

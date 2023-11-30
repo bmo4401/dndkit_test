@@ -1,4 +1,4 @@
-import { FormElements } from '@/components/DndElements';
+import { FormElements } from '@/components/frame/left/Sidebar';
 import useDesign from '@/hooks/useDesign';
 
 const DndElementOverlay = () => {

@@ -1,6 +1,6 @@
 'use client';
 
-import DndElement from '@/components/DndElement';
+import DndElement from '@/components/frame/left/DndElement';
 import Separator from '@/components/fields/Separator';
 import Spacer from '@/components/fields/Spacer';
 import Subtitle from '@/components/fields/Subtitle';

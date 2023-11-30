@@ -1,11 +1,9 @@
 'use client';
-import { FormElements } from '@/components/DndElements';
-import FrameElement from '@/components/FrameElement';
+import { FormElements } from '@/components/frame/left/Sidebar';
+import FrameElement from '@/components/frame/right/FrameElement';
 import useDesign from '@/hooks/useDesign';
 import { generateId } from '@/libs/utils';
-import { useDndMonitor, useDraggable, useDroppable } from '@dnd-kit/core';
-import { Menu } from 'lucide-react';
-import { useState } from 'react';
+import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 
 const Frame = () => {
   const { elements, addElement } = useDesign();
