@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ContextProvider from "@/providers/ContextProvider";
 import { cn } from "@/libs/utils";
+import Navbar from "@/components/Navbar";
+import CreateFormModal from "@/components/modals/CreateFormModal";
+import PreviewModal from "@/components/modals/PreviewModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,10 +24,15 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          "h-screen w-screen overflow-hidden bg-black text-white",
+          "h-screen w-screen  bg-black  text-white",
         )}
       >
-        <ContextProvider> {children}</ContextProvider>
+        <ContextProvider>
+          {/* modal */}
+          <CreateFormModal />
+          <Navbar />
+          {children}
+        </ContextProvider>
       </body>
     </html>
   );

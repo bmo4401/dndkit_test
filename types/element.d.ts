@@ -1,4 +1,4 @@
-import { SelectedElementType } from "@/hooks/useDesign";
+import { SelectedElementType } from "@/hooks/useForms";
 import { LucideIcon } from "lucide-react";
 
 export type ElementType =
@@ -12,10 +12,13 @@ export type ElementType =
   | "TextArea"
   | "Select"
   | "Number";
-type DndElementType = {
+export type DndElementType = {
   type: ElementType;
   icon: LucideIcon;
-  attribute?: any;
+  attribute?: {
+    design?: Object<any>;
+    form?: Object<any>;
+  };
   designComponent: React.FC<{ element: SelectedElementType }>;
   designOverlay?: React.FC<>;
   propertyComponent: React.FC<>;

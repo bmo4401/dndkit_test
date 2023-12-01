@@ -1,5 +1,5 @@
 "use client";
-import useDesign, { SelectedElementType } from "@/hooks/useDesign";
+import useForms, { SelectedElementType } from "@/hooks/useForms";
 import { cn } from "@/libs/utils";
 import { DndElementType } from "@/types/element";
 import { SeparatorHorizontal } from "lucide-react";
@@ -8,12 +8,12 @@ interface DesignProps {
   element: SelectedElementType;
 }
 const Design: React.FC<DesignProps> = ({ element }) => {
-  const { updateElement } = useDesign();
+  const { updateElement } = useForms();
   const [mode, setMode] = useState(false);
   const [space, setSpace] = useState(5);
   const update = () => {
     updateElement({
-      element: { ...element, attribute: { space } },
+      element: { ...element, attribute: { design: { space } } },
     });
     setMode(!mode);
   };
@@ -80,7 +80,7 @@ interface FormProps {
   element: SelectedElementType;
 }
 const Form: React.FC<FormProps> = ({ element }) => {
-  const { space } = element.attribute;
+  const { space } = element.attribute?.design;
   return (
     <div
       className={cn("ml-3 h-fit w-full")}
@@ -102,7 +102,7 @@ const Spacer: DndElementType = {
   type: "Spacer",
   icon: SeparatorHorizontal,
   attribute: {
-    space: 5,
+    design: { space: 5 },
   },
   designComponent: Design,
   designOverlay: DesignOverlay,

@@ -1,14 +1,13 @@
 "use client";
 
-import DndElement from '@/components/frame/left/DndElement';
-import Separator from '@/components/fields/Separator';
-import Spacer from '@/components/fields/Spacer';
-import Subtitle from '@/components/fields/Subtitle';
-import Text from '@/components/fields/Text';
-import TextArea from '@/components/fields/TextArea';
-import Title from '@/components/fields/Title';
+import DndElement from "@/components/frame/left/DndElement";
 
-
+import Separator from "@/components/fields/Separator";
+import Spacer from "@/components/fields/Spacer";
+import Subtitle from "@/components/fields/Subtitle";
+import Title from "@/components/fields/Title";
+import Text from "@/components/fields/input/Text";
+import TextArea from "@/components/fields/input/TextArea";
 export const FormElements = {
   [Title.type]: Title,
   [Text.type]: Text,
@@ -25,6 +24,7 @@ export const FormElementsList = [
   Spacer,
   Separator,
 ];
+
 const DndElements = () => {
   return (
     <div className="flex w-1/3 flex-col">

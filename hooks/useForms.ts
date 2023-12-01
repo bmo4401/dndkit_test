@@ -1,7 +1,10 @@
+import { getForm } from "@/actions/form";
 import { DndElementType } from "@/types/element";
+import { Form } from "@prisma/client";
 import { create } from "zustand";
 export type SelectedElementType = DndElementType & { id: string };
 interface State {
+  form: Form | null;
   elements: SelectedElementType[] | [];
 
   setElements: (elements: SelectedElementType[]) => void;
@@ -18,13 +21,15 @@ interface State {
   clearElement: () => void;
 }
 
-const useDesigner = create<State>((set, get) => ({
+const useForms = create<State>((set, get) => ({
+  form: null,
   elements: [],
   selectedElement: null,
-  setElements: (elements: SelectedElementType[]) =>
+  setElements: (elements: SelectedElementType[]) => {
     set((state) => ({
       elements,
-    })),
+    }));
+  },
 
   addElement: ({
     index = 0,
@@ -61,4 +66,4 @@ const useDesigner = create<State>((set, get) => ({
   },
 }));
 
-export default useDesigner;
+export default useForms;

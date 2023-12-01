@@ -1,19 +1,31 @@
 "use client";
-import useDesign, { SelectedElementType } from "@/hooks/useDesign";
+import useForms, { SelectedElementType } from "@/hooks/useForms";
 import { DndElementType } from "@/types/element";
 import { Heading2 } from "lucide-react";
 import { useState } from "react";
 interface DesignProps {
   element: SelectedElementType;
 }
-const Design: React.FC<DesignProps> = ({ element }) => {
-  const { updateElement } = useDesign();
+const Subtitle: DndElementType = {
+  type: "Subtitle",
+  icon: Heading2,
+  attribute: {
+    design: { input: "" },
+  },
+  designComponent: Design,
+  formComponent: Form,
+  designOverlay: DesignOverlay,
+  propertyComponent: Property,
+};
+
+function Design({ element }: DesignProps) {
+  const { updateElement } = useForms();
   const [mode, setMode] = useState(false);
-  const [input, setInput] = useState(element.attribute.input);
+  const [input, setInput] = useState(element.attribute?.design.input);
 
   const update = () => {
     updateElement({
-      element: { ...element, attribute: { input } },
+      element: { ...element, attribute: { design: { input } } },
     });
     setMode(!mode);
   };
@@ -58,20 +70,20 @@ const Design: React.FC<DesignProps> = ({ element }) => {
       </div>
     </div>
   );
-};
+}
 interface FormProps {
   element: SelectedElementType;
 }
-const Form: React.FC<FormProps> = ({ element }) => {
-  const { input } = element.attribute;
+function Form({ element }: FormProps) {
+  const { input } = element.attribute?.design;
   return (
     <div className="flex w-full  px-3  pb-2 text-xs text-gray-600">
       <h2>{input.length !== 0 ? input : Subtitle.type}</h2>
     </div>
   );
-};
+}
 
-const DesignOverlay = () => {
+function DesignOverlay() {
   return (
     <div className="group relative  flex h-24 w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
       <span className="flex w-full items-center gap-2">{Subtitle.type}</span>
@@ -81,27 +93,15 @@ const DesignOverlay = () => {
       </div>
     </div>
   );
-};
+}
 
-const Property = () => {
+function Property() {
   return (
     <div className="flex w-24 flex-col items-center justify-center gap-1 rounded-md border border-slate-500 p-4">
       {Subtitle.type}
       <Subtitle.icon />
     </div>
   );
-};
-
-const Subtitle: DndElementType = {
-  type: "Subtitle",
-  icon: Heading2,
-  attribute: {
-    input: "",
-  },
-  designComponent: Design,
-  formComponent: Form,
-  designOverlay: DesignOverlay,
-  propertyComponent: Property,
-};
+}
 
 export default Subtitle;

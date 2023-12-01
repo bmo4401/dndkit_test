@@ -1,25 +1,34 @@
 "use client";
 import { FormElements } from "@/components/frame/left/Sidebar";
 import FrameElement from "@/components/frame/right/FrameElement";
-import useDesign from "@/hooks/useDesign";
+import useForms from "@/hooks/useForms";
 import { generateId } from "@/libs/utils";
 import { useDndMonitor, useDroppable } from "@dnd-kit/core";
+import { Form } from "@prisma/client";
+import { useEffect } from "react";
 
-const Frame = () => {
-  const { elements, addElement } = useDesign();
+const Frame = ({ form }: { form: Form }) => {
+  const { elements, addElement, setElements } = useForms();
   const droppable = useDroppable({
     id: "-drop-area",
     data: {
       isDropArea: true,
     },
   });
+  useEffect(() => {
+    if (form.content) {
+      setElements(JSON.parse(form.content));
+    }
+  }, [form.id]);
   useDndMonitor({
     onDragEnd: ({ active, over }) => {
       const isDropArea = over?.id === "-drop-area";
       const isDndElement = active.data.current?.isDndElement;
       if (!isDndElement) return;
-      const type = active.data.current?.type;
+      const type = active.data.current?.type as string;
       const DndElement = FormElements[type];
+      console.log("❄️ ~ file: Frame.tsx:30 ~ FormElements:", FormElements);
+
       /* Insert element */
       if (isDropArea && isDndElement && elements.length === 0) {
         addElement({ element: { ...DndElement, id: generateId() } });

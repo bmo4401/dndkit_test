@@ -9,14 +9,8 @@ export default function Card({ form }: { form: Form }) {
   return (
     <div className="flex max-w-[70%] items-start justify-between rounded-md border border-slate-500 px-5 py-3">
       <div className="flex flex-row items-center gap-3 px-3 py-5">
-        <div className="self-start p-0">
-          <Image
-            src={"/form.png"}
-            alt=""
-            width={80}
-            height={80}
-            className="rounded-md"
-          />
+        <div className="relative aspect-square w-20 self-start p-0">
+          <Image src={"/form.png"} alt="" fill className="rounded-md " />
         </div>
         <div className="flex flex-col gap-2 p-0">
           <div>{form.name}</div>
@@ -31,9 +25,13 @@ export default function Card({ form }: { form: Form }) {
         <div className="flex flex-col gap-3">
           <div className="self-end">
             {form.published && (
-              <Badge className="bg-green-500 text-white">Published</Badge>
+              <h2 className="rounded-sm bg-green-500 px-3 text-white">
+                Published
+              </h2>
             )}
-            {!form.published && <Badge className="bg-red-500">Draft</Badge>}
+            {!form.published && (
+              <h2 className="rounded-sm bg-red-500 px-3">Draft</h2>
+            )}
           </div>
           <div className="self-end">
             <span className="flex items-center gap-3">
@@ -60,7 +58,7 @@ export default function Card({ form }: { form: Form }) {
         <div>
           {form.published && (
             <Button className=" mt-2 w-full gap-4 text-sm">
-              <Link href={"/"}>
+              <Link className="flex gap-3 text-xl" href={"/"}>
                 {" "}
                 View submissions
                 <MoveRight />
@@ -68,8 +66,8 @@ export default function Card({ form }: { form: Form }) {
             </Button>
           )}
           {!form.published && (
-            <Button className=" mt-2 w-full gap-4 text-sm   ">
-              <Link href={`/builder/${form.id}`}>
+            <Button className=" mt-2 w-fit gap-4 text-sm   ">
+              <Link className="flex gap-3 text-xl" href={`/builder/${form.id}`}>
                 {" "}
                 Edit form
                 <Pencil />

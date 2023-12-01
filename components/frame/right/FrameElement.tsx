@@ -1,7 +1,7 @@
 "use client";
 
-import { FormElements } from "@/components/frame/left/Sidebar";
-import useDesign from "@/hooks/useDesign";
+import { FormElements } from "@/data/data";
+import useForms from "@/hooks/useForms";
 import { cn, generateId } from "@/libs/utils";
 import { DndElementType, ElementType } from "@/types/element";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
@@ -18,7 +18,7 @@ const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
     designComponent: DesignComponent,
     formComponent: FormComponent,
   } = element;
-  const { addElement, removeElement, elements } = useDesign();
+  const { addElement, removeElement, elements } = useForms();
 
   const handlerDrag = useDraggable({
     id: id + "-handler",

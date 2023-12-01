@@ -28,11 +28,32 @@ input[type="number"].hidden-control {
     #00cdac 51%,
     #02aab0 100%
   );
-  box-shadow: 0 0 20px #eee;
+  /*   box-shadow: 0 0 20px #eee; */
   transition: 0.5s;
 }
 .gradient-button:hover {
   background-position: right center; /* change the direction of the change here */
   color: #fff;
   text-decoration: none;
+}
+
+.text-linear {
+  font-weight: 800;
+  background: -webkit-linear-gradient(
+    45deg,
+    #02aab0 0%,
+    #00cdac 51%,
+    #02aab0 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient {
+  background-image: linear-gradient(
+    to right,
+    #02aab0 0%,
+    #00cdac 51%,
+    #02aab0 100%
+  );
 }

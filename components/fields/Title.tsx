@@ -1,5 +1,5 @@
 "use client";
-import useDesign, { SelectedElementType } from "@/hooks/useDesign";
+import useForms, { SelectedElementType } from "@/hooks/useForms";
 import { DndElementType } from "@/types/element";
 import { Heading1 } from "lucide-react";
 import { useState } from "react";
@@ -8,14 +8,28 @@ interface DesignProps {
   element: SelectedElementType;
 }
 
-const Design: React.FC<DesignProps> = ({ element }) => {
-  const { updateElement } = useDesign();
+const Title: DndElementType = {
+  type: "Title",
+  icon: Heading1,
+  attribute: {
+    design: { input: "", isRequired: false },
+  },
+  designComponent: Design,
+  designOverlay: DesignOverlay,
+  formComponent: Form,
+  propertyComponent: Property,
+};
+
+function Design({ element }: DesignProps) {
+  const { updateElement } = useForms();
   const [mode, setMode] = useState(false);
-  const [input, setInput] = useState(element.attribute.input);
-  const [isRequired, setIsRequired] = useState(element.attribute.isRequired);
+  const [input, setInput] = useState(element.attribute?.design.input);
+  const [isRequired, setIsRequired] = useState(
+    element.attribute?.design.isRequired,
+  );
   const update = () => {
     updateElement({
-      element: { ...element, attribute: { input, isRequired } },
+      element: { ...element, attribute: { design: { input, isRequired } } },
     });
     setMode(!mode);
   };
@@ -68,12 +82,12 @@ const Design: React.FC<DesignProps> = ({ element }) => {
       </div>
     </div>
   );
-};
+}
 interface FormProps {
   element: SelectedElementType;
 }
-const Form: React.FC<FormProps> = ({ element }) => {
-  const { input, isRequired } = element.attribute;
+function Form({ element }: FormProps) {
+  const { input, isRequired } = element.attribute?.design;
   return (
     <span className="flex  items-center gap-2 px-3 py-1">
       <span className="leading-none">
@@ -83,9 +97,9 @@ const Form: React.FC<FormProps> = ({ element }) => {
       {isRequired && <span className="leading-none text-rose-500">*</span>}
     </span>
   );
-};
+}
 
-const DesignOverlay = () => {
+function DesignOverlay() {
   return (
     <div className="group relative  flex h-24 w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
       <span className="flex w-full items-center gap-2 hover:cursor-pointer hover:opacity-80">
@@ -97,28 +111,15 @@ const DesignOverlay = () => {
       </div>
     </div>
   );
-};
+}
 
-const Property = () => {
+function Property() {
   return (
     <div className="flex w-24 flex-col items-center justify-center gap-1 rounded-md border border-slate-500 p-4">
       {Title.type}
       <Title.icon />
     </div>
   );
-};
-
-const Title: DndElementType = {
-  type: "Title",
-  icon: Heading1,
-  attribute: {
-    input: "",
-    isRequired: false,
-  },
-  designComponent: Design,
-  designOverlay: DesignOverlay,
-  formComponent: Form,
-  propertyComponent: Property,
-};
+}
 
 export default Title;

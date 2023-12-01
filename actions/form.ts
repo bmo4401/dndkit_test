@@ -10,9 +10,38 @@ export const getForms = () => {
   }
 };
 
+export const getForm = async ({ id }: { id: number }) => {
+  try {
+    const res = await prisma.form.findUnique({
+      where: { id },
+    });
+    if (!res) throw new Error("some thing went wrong");
+    return res;
+  } catch (error) {
+    throw new Error("some thing went wrong");
+  }
+};
+
 export const createForm = async (input: string) => {
   try {
     const res = await prisma.form.create({ data: { name: input } });
+    revalidatePath("/");
+    return res;
+  } catch (error) {
+    throw new Error("some thing went wrong");
+  }
+};
+
+export const saveForm = async ({
+  id,
+  content,
+}: {
+  id: number;
+  content: string;
+}) => {
+  console.log("❄️ ~ file: form.ts:42 ~ content:", content);
+  try {
+    const res = await prisma.form.update({ data: { content }, where: { id } });
     revalidatePath("/");
     return res;
   } catch (error) {
