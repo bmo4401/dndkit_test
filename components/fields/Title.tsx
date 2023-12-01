@@ -9,15 +9,15 @@ interface DesignProps {
 }
 
 const Title: DndElementType = {
+  designComponent: Design,
+  designOverlay: DesignOverlay,
+  formComponent: Form,
+  propertyComponent: Property,
   type: "Title",
   icon: Heading1,
   attribute: {
     design: { input: "", isRequired: false },
   },
-  designComponent: Design,
-  designOverlay: DesignOverlay,
-  formComponent: Form,
-  propertyComponent: Property,
 };
 
 function Design({ element }: DesignProps) {

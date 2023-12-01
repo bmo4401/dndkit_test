@@ -1,5 +1,6 @@
 "use client";
-import { FormElements } from "@/components/frame/left/Sidebar";
+import { FormElements } from "@/components/data";
+console.log("❄️ ~ file: Frame.tsx:3 ~ FormElements:", FormElements);
 import FrameElement from "@/components/frame/right/FrameElement";
 import useForms from "@/hooks/useForms";
 import { generateId } from "@/libs/utils";
@@ -9,6 +10,7 @@ import { useEffect } from "react";
 
 const Frame = ({ form }: { form: Form }) => {
   const { elements, addElement, setElements } = useForms();
+  console.log("❄️ ~ file: Frame.tsx:12 ~ elements:", elements);
   const droppable = useDroppable({
     id: "-drop-area",
     data: {
@@ -27,11 +29,13 @@ const Frame = ({ form }: { form: Form }) => {
       if (!isDndElement) return;
       const type = active.data.current?.type as string;
       const DndElement = FormElements[type];
-      console.log("❄️ ~ file: Frame.tsx:30 ~ FormElements:", FormElements);
+      console.log("❄️ ~ file: Frame.tsx:31 ~ DndElement:", DndElement);
 
       /* Insert element */
       if (isDropArea && isDndElement && elements.length === 0) {
-        addElement({ element: { ...DndElement, id: generateId() } });
+        let elementData = DndElement;
+        elementData.id = generateId();
+        addElement({ element: elementData });
         return;
       }
       if (isDropArea && isDndElement) {

@@ -1,9 +1,9 @@
 "use client";
 
-import { FormElements } from "@/data/data";
+import { FormElements } from "@/components/data";
 import useForms from "@/hooks/useForms";
 import { cn, generateId } from "@/libs/utils";
-import { DndElementType, ElementType } from "@/types/element";
+import { DndElementType } from "@/types/element";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import { Menu } from "lucide-react";
 
