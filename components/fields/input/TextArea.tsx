@@ -18,18 +18,28 @@ const Design = () => {
 
 interface FormProps {
   element: SelectedElementType;
+  isSubmitted?: boolean;
 }
-const Form: React.FC<FormProps> = ({ element }) => {
-  const [input, setInput] = useState(element.attribute.input ?? "");
+const Form: React.FC<FormProps> = ({ element, isSubmitted = false }) => {
+  const [input, setInput] = useState(element.attribute?.form.input ?? "");
   const { updateElement } = useForms();
   const update = () => {
     updateElement({
-      element: { ...element, attribute: { input } },
+      element: {
+        ...element,
+        attribute: {
+          form: {
+            input,
+          },
+        },
+      },
     });
   };
   return (
-    <div className="mx-3 flex w-full px-3 py-2">
+    <div className="mx-3 flex w-full py-2">
       <textarea
+        disabled={isSubmitted}
+        name={element.id}
         value={input ?? ""}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => {
@@ -38,7 +48,7 @@ const Form: React.FC<FormProps> = ({ element }) => {
         onBlur={() => update()}
         rows={4}
         cols={30}
-        className="resize rounded-md border border-slate-500 bg-transparent px-3 py-2 outline-[1px] outline-white"
+        className="resize rounded-md border border-slate-500 bg-transparent px-3 py-2 text-sm outline-[1px] outline-white "
         placeholder="Type here"
       />
     </div>
@@ -57,7 +67,16 @@ const Property = () => {
 const TextArea: DndElementType = {
   type: "TextArea",
   icon: Baseline,
-  attribute: { input: "" },
+  attribute: {
+    form: {
+      input: "",
+    },
+  },
+  getAttribute: () => ({
+    icon: TextArea.icon,
+    type: TextArea.type,
+    attribute: TextArea.attribute,
+  }),
   designComponent: Design,
   formComponent: Form,
   propertyComponent: Property,

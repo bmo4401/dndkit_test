@@ -17,25 +17,29 @@ const Design = () => {
 };
 interface FormProps {
   element: SelectedElementType;
+  isSubmitted?: boolean;
 }
-const Form: React.FC<FormProps> = ({ element }) => {
-  const [input, setInput] = useState(element.attribute.input ?? "");
+const Form: React.FC<FormProps> = ({ element, isSubmitted = false }) => {
+  const [input, setInput] = useState(element.attribute?.form.input ?? "");
   const { updateElement } = useForms();
   const update = () => {
     updateElement({
-      element: { ...element, attribute: { input } },
+      element: { ...element, attribute: { form: { input } } },
     });
   };
   return (
-    <div className="flex  w-full items-center  p-3">
+    <div className="flex  w-full items-center">
       <input
-        value={input}
+        disabled={isSubmitted}
+        name={element.id}
+        value={input ?? ""}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => {
           e.key === "Enter" && update();
         }}
         onBlur={() => update()}
-        className="mx-3  h-10 w-full rounded-md border border-slate-500 bg-transparent px-3"
+        placeholder="Type here"
+        className="mx-3  h-10 w-full rounded-md border border-slate-500 bg-transparent px-3 text-sm"
       />
     </div>
   );
@@ -54,8 +58,13 @@ const Text: DndElementType = {
   type: "Text",
   icon: Type,
   attribute: {
-    input: "",
+    form: { input: "" },
   },
+  getAttribute: () => ({
+    icon: Text.icon,
+    type: Text.type,
+    attribute: Text.attribute,
+  }),
   designComponent: Design,
   formComponent: Form,
   propertyComponent: Property,

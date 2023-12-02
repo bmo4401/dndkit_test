@@ -18,6 +18,11 @@ const Title: DndElementType = {
   attribute: {
     design: { input: "", isRequired: false },
   },
+  getAttribute: () => ({
+    icon: Title.icon,
+    type: Title.type,
+    attribute: Title.attribute,
+  }),
 };
 
 function Design({ element }: DesignProps) {
@@ -85,11 +90,13 @@ function Design({ element }: DesignProps) {
 }
 interface FormProps {
   element: SelectedElementType;
+  isSubmitted?: boolean;
 }
-function Form({ element }: FormProps) {
-  const { input, isRequired } = element.attribute?.design;
+function Form({ element, isSubmitted = false }: FormProps) {
+  const { input, isRequired } =
+    element.attribute?.form ?? element.attribute?.design;
   return (
-    <span className="flex  items-center gap-2 px-3 py-1">
+    <span className="flex items-center  justify-start gap-2 px-3 py-1">
       <span className="leading-none">
         {" "}
         {input.length !== 0 ? input : Title.type}

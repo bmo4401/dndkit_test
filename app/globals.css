@@ -57,3 +57,20 @@ input[type="number"].hidden-control {
     #02aab0 100%
   );
 }
+
+/* Scroll bar modify */
+.scroll-bar {
+  overflow-x: hidden;
+}
+.scroll-bar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #ffffff4c;
+}
+.scroll-bar::-webkit-scrollbar-track {
+  box-shadow: inset #fff;
+  border-radius: 4px;
+}
+.scroll-bar::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+}

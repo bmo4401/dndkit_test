@@ -21,7 +21,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
   return (
     <div
       className={cn(
-        "aspect-square w-full rounded-md border border-slate-500 p-5",
+        "aspect-[5/4] w-full rounded-md border border-slate-500 p-5",
         className,
       )}
     >
@@ -30,7 +30,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
         <div className="flex h-full flex-col justify-between gap-10">
           {" "}
           <div className="flex flex-col gap-10">
-            <h2 className="text-2xl font-semibold">{title}</h2>
+            <h2 className="text-xl font-semibold">{title}</h2>
             <h2 className="text-4xl font-semibold">{value}</h2>
           </div>
           <p className="text-slate-600">{helperText}</p>

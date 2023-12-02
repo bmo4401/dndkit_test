@@ -1,17 +1,13 @@
-"use client";
 import Logo from "@/components/Logo";
-import { Button } from "@/components/ui/Button";
-import useModal from "@/hooks/useModal";
-import { usePathname } from "next/navigation";
 const Navbar = () => {
-  const { show, setShow } = useModal();
-  const pathname = usePathname();
-  const isHomePage = pathname === "/";
   return (
-    <div className="flex items-center justify-between px-10 py-5">
+    <div className="relative flex h-20 items-center justify-between bg-black  px-10 text-white">
+      <div
+        className="absolute bottom-0 mx-[-2.5rem] h-[1px] w-full 
+      border-b border-slate-500
+      "
+      />
       <Logo />
-
-      <Button onClick={() => setShow(!show)}>Create New</Button>
     </div>
   );
 };

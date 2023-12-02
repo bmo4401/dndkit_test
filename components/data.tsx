@@ -12,11 +12,6 @@ export const FormElements = {
   [Spacer.type]: Spacer,
   [Separator.type]: Separator,
 };
-export const FormElementsList = [
-  Title,
-  Subtitle,
-  Text,
-  TextArea,
-  Spacer,
-  Separator,
-];
+export const TitleComponents = [Title, Subtitle, Spacer, Separator];
+
+export const InputComponents = [Text, TextArea];

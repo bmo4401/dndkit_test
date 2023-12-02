@@ -3,21 +3,17 @@
 import { FormElements } from "@/components/data";
 import useForms from "@/hooks/useForms";
 import { cn, generateId } from "@/libs/utils";
-import { DndElementType } from "@/types/element";
+import { AttributeType, DndElementType } from "@/types/element";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import { Menu } from "lucide-react";
 
 interface FrameElementProps {
-  element: DndElementType;
+  element: AttributeType;
   id: string;
 }
 
 const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
-  const {
-    type,
-    designComponent: DesignComponent,
-    formComponent: FormComponent,
-  } = element;
+  const { type, designComponent: DesignComponent } = FormElements[element.type];
   const { addElement, removeElement, elements } = useForms();
 
   const handlerDrag = useDraggable({
@@ -76,12 +72,12 @@ const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
   });
   if (handlerDrag.isDragging) return null;
   return (
-    <div className="flex w-full justify-between  rounded-md  ">
+    <div className="flex w-full justify-between  gap-3 rounded-md  pb-2">
       <div
         ref={handlerDrag.setNodeRef}
         {...handlerDrag.attributes}
         {...handlerDrag.listeners}
-        className="flex aspect-square h-24 items-center justify-center border border-slate-500"
+        className=" flex aspect-square h-24 items-center justify-center rounded-md border border-slate-500"
       >
         {" "}
         <Menu />

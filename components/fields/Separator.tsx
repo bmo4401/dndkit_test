@@ -30,6 +30,10 @@ const Property = () => {
 const Separator: DndElementType = {
   type: "Separator",
   icon: Minus,
+  getAttribute: () => ({
+    icon: Separator.icon,
+    type: Separator.type,
+  }),
   designComponent: Design,
   formComponent: Form,
   propertyComponent: Property,

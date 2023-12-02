@@ -6,6 +6,7 @@ import { cn } from "@/libs/utils";
 import Navbar from "@/components/Navbar";
 import CreateFormModal from "@/components/modals/CreateFormModal";
 import PreviewModal from "@/components/modals/PreviewModal";
+import Loading from "@/components/modals/LoadingModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,7 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          "h-screen w-screen  bg-black  text-white",
+          "scroll-bar  h-screen w-screen  bg-black  text-white",
         )}
       >
         <ContextProvider>

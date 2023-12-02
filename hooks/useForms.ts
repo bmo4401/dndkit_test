@@ -1,8 +1,8 @@
 import { getForm } from "@/actions/form";
-import { DndElementType } from "@/types/element";
+import { AttributeType, DndElementType } from "@/types/element";
 import { Form } from "@prisma/client";
 import { create } from "zustand";
-export type SelectedElementType = DndElementType & { id: string };
+export type SelectedElementType = AttributeType & { id: string };
 interface State {
   form: Form | null;
   elements: SelectedElementType[] | [];

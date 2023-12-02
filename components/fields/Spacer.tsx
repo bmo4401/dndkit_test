@@ -80,7 +80,7 @@ interface FormProps {
   element: SelectedElementType;
 }
 const Form: React.FC<FormProps> = ({ element }) => {
-  const { space } = element.attribute?.design;
+  const { space } = element.attribute?.form ?? element.attribute?.design;
   return (
     <div
       className={cn("ml-3 h-fit w-full")}
@@ -104,6 +104,11 @@ const Spacer: DndElementType = {
   attribute: {
     design: { space: 5 },
   },
+  getAttribute: () => ({
+    icon: Spacer.icon,
+    type: Spacer.type,
+    attribute: Spacer.attribute,
+  }),
   designComponent: Design,
   designOverlay: DesignOverlay,
   formComponent: Form,

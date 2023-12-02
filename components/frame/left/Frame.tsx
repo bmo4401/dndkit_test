@@ -1,25 +1,21 @@
 "use client";
 import { FormElements } from "@/components/data";
-import FrameElement from "@/components/frame/right/FrameElement";
+import FrameElement from "@/components/frame/left/FrameElement";
 import useForms from "@/hooks/useForms";
-import { generateId } from "@/libs/utils";
+import { cn, generateId } from "@/libs/utils";
 import { useDndMonitor, useDroppable } from "@dnd-kit/core";
 import { Form } from "@prisma/client";
-import { useEffect } from "react";
 
 const Frame = ({ form }: { form: Form }) => {
   const { elements, addElement, setElements } = useForms();
+
   const droppable = useDroppable({
     id: "-drop-area",
     data: {
       isDropArea: true,
     },
   });
-  useEffect(() => {
-    if (form.content) {
-      setElements(JSON.parse(form.content));
-    }
-  }, [form.id]);
+
   useDndMonitor({
     onDragEnd: ({ active, over }) => {
       const isDropArea = over?.id === "-drop-area";
@@ -42,19 +38,26 @@ const Frame = ({ form }: { form: Form }) => {
       }
     },
   });
+
   return (
-    <div className="flex h-full w-full justify-between rounded-md">
-      <div className="h-screen w-[40%] overflow-hidden overflow-y-auto">
+    <div className="flex h-full w-full justify-center pb-10">
+      {/*       <div className="scroll-bar h-screen w-[40%] overflow-hidden overflow-y-auto">
         {elements?.length &&
-          elements.map((element) => (
-            <div className="flex justify-between gap-2">
-              <element.formComponent element={element} />
-            </div>
-          ))}
-      </div>
+          elements.map((element) => {
+            const FormComponent = FormElements[element.type].formComponent;
+            return (
+              <div className="flex justify-between gap-2">
+                <FormComponent element={element} />
+              </div>
+            );
+          })}
+      </div> */}
       <div
         ref={droppable.setNodeRef}
-        className="h-screen w-[60%]  overflow-hidden overflow-y-auto border "
+        className={cn(
+          " w-[80%]  rounded-md border-4 border-slate-500 px-5 py-5 pb-20",
+          droppable.isOver && "border-white",
+        )}
       >
         {/* Form Builder */}
         {elements?.length ? (
@@ -68,7 +71,9 @@ const Frame = ({ form }: { form: Form }) => {
             );
           })
         ) : (
-          <h2>Not thing here</h2>
+          <h2 className="flex h-full w-full items-center justify-center text-xl text-slate-500">
+            Let build your own form!
+          </h2>
         )}
       </div>
     </div>

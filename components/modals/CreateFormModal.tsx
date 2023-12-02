@@ -5,27 +5,30 @@ import { createForm } from "@/actions/form";
 import { useFormStatus } from "react-dom";
 import useModal from "@/hooks/useModal";
 import { cn } from "@/libs/utils";
+import { useRouter } from "next/navigation";
 const CreateFormModal = () => {
   const { show, setShow } = useModal();
   const { pending } = useFormStatus();
-
+  const router = useRouter();
   const handleForm = async (formData: FormData) => {
-    const input = formData.get("name") as string;
-    await createForm(input);
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+    const res = await createForm({ name, description });
     setShow(false);
+    router.push(`/builder/${res.id}`);
   };
 
   return (
     <div
       className={cn(
-        "absolute top-0 flex h-screen items-start justify-center overflow-hidden pt-32 transition-all duration-300 ease-in-out",
+        "absolute top-0 z-20 flex h-screen items-start justify-center overflow-y-hidden pt-32 text-white transition-all duration-300 ease-in-out",
         !show ? "w-0" : "w-screen",
       )}
     >
       {/* overlay */}
       <div
         onClick={() => setShow(false)}
-        className="absolute inset-0 h-full w-full bg-black/80 opacity-80"
+        className="absolute inset-0 h-full w-full overflow-hidden bg-black/80 opacity-80"
       />
       <form
         action={handleForm}
@@ -35,7 +38,10 @@ const CreateFormModal = () => {
           Create New Form
         </h2>
         <div className="flex flex-col gap-2">
-          <label htmlFor="name">Name</label>
+          <div className="flex gap-2">
+            <label htmlFor="name">Name</label>
+            <span className="text-rose-500">*</span>
+          </div>
           <input
             id="name"
             type={"text"}
@@ -46,11 +52,24 @@ const CreateFormModal = () => {
             py-2   text-black outline-none focus:outline-primary"
           />
         </div>
-
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <label htmlFor="description">Description</label>
+          </div>
+          <input
+            id="description"
+            type={"text"}
+            name="description"
+            className="
+            h-fit rounded-md
+            px-3
+            py-2   text-black outline-none focus:outline-primary"
+          />
+        </div>
         <ButtonCustom
           disabled={pending}
           type="submit"
-          className="gradient-button w-full  border-none text-white  outline-none"
+          className="gradient-button my-3  w-full border-none  text-lg font-semibold text-white outline-none"
         >
           Save
         </ButtonCustom>

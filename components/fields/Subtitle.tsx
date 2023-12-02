@@ -12,6 +12,11 @@ const Subtitle: DndElementType = {
   attribute: {
     design: { input: "" },
   },
+  getAttribute: () => ({
+    icon: Subtitle.icon,
+    type: Subtitle.type,
+    attribute: Subtitle.attribute,
+  }),
   designComponent: Design,
   formComponent: Form,
   designOverlay: DesignOverlay,
@@ -75,9 +80,10 @@ interface FormProps {
   element: SelectedElementType;
 }
 function Form({ element }: FormProps) {
-  const { input } = element.attribute?.design;
+  console.log("❄️ ~ file: Subtitle.tsx:83 ~ element:", element);
+  const { input } = element.attribute?.form ?? element.attribute?.design;
   return (
-    <div className="flex w-full  px-3  pb-2 text-xs text-gray-600">
+    <div className="flex w-full px-3  pb-2 text-xs text-gray-600">
       <h2>{input.length !== 0 ? input : Subtitle.type}</h2>
     </div>
   );

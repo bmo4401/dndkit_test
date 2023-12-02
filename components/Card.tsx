@@ -7,30 +7,37 @@ import { formatDistance } from "date-fns";
 import { Form } from "@prisma/client";
 export default function Card({ form }: { form: Form }) {
   return (
-    <div className="flex max-w-[70%] items-start justify-between rounded-md border border-slate-500 px-5 py-3">
-      <div className="flex flex-row items-center gap-3 px-3 py-5">
-        <div className="relative aspect-square w-20 self-start p-0">
-          <Image src={"/form.png"} alt="" fill className="rounded-md " />
+    <div className="flex h-full max-w-[70%] items-start justify-between rounded-md border border-slate-500 px-5 py-3">
+      <div className="flex h-full max-w-[70%] flex-row items-start gap-3 px-3 ">
+        <div className=" relative aspect-square w-20 self-start p-0">
+          <Image
+            src={"/form.png"}
+            alt=""
+            fill
+            className="rounded-md object-cover "
+          />
         </div>
-        <div className="flex flex-col gap-2 p-0">
+        <div className="flex h-full w-[calc(100%-5rem)] flex-col justify-between gap-2 p-0">
           <div>{form.name}</div>
-          <p>{form.description}</p>
+          <p className="line-clamp-2 text-sm text-slate-400">
+            {form.description}
+          </p>
           <p>
             {formatDistance(form.createdAt, new Date(), { addSuffix: true })}
           </p>
         </div>
       </div>
 
-      <div className=" flex flex-col  gap-3 p-0">
+      <div className=" flex h-full flex-col justify-between gap-3 p-0">
         <div className="flex flex-col gap-3">
           <div className="self-end">
             {form.published && (
-              <h2 className="rounded-sm bg-green-500 px-3 text-white">
+              <h2 className="rounded-md bg-green-500 px-3 text-white">
                 Published
               </h2>
             )}
             {!form.published && (
-              <h2 className="rounded-sm bg-red-500 px-3">Draft</h2>
+              <h2 className="rounded-md bg-red-500 px-3">Draft</h2>
             )}
           </div>
           <div className="self-end">
@@ -57,20 +64,26 @@ export default function Card({ form }: { form: Form }) {
         </div>
         <div>
           {form.published && (
-            <Button className=" mt-2 w-full gap-4 text-sm">
-              <Link className="flex gap-3 text-xl" href={"/"}>
+            <Button className=" mt-2 w-full  gap-4 ">
+              <Link
+                className="flex items-center gap-3 text-base"
+                href={`/published/${form.id}/view`}
+              >
                 {" "}
-                View submissions
+                View
                 <MoveRight />
               </Link>
             </Button>
           )}
           {!form.published && (
             <Button className=" mt-2 w-fit gap-4 text-sm   ">
-              <Link className="flex gap-3 text-xl" href={`/builder/${form.id}`}>
+              <Link
+                className="flex items-center gap-3 text-base"
+                href={`/builder/${form.id}`}
+              >
                 {" "}
                 Edit form
-                <Pencil />
+                <Pencil size={20} />
               </Link>
             </Button>
           )}
