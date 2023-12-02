@@ -1,7 +1,7 @@
 "use client";
 import useForms, { SelectedElementType } from "@/hooks/useForms";
 import { DndElementType } from "@/types/element";
-import { Heading1 } from "lucide-react";
+import { Heading1, PencilIcon } from "lucide-react";
 import { useState } from "react";
 
 interface DesignProps {
@@ -71,6 +71,11 @@ function Design({ element }: DesignProps) {
         >
           <span> {input.length !== 0 ? input : Title.type}</span>
           {isRequired && <span className="text-rose-500">*</span>}
+          <PencilIcon
+            className="cursor-pointer  text-slate-500 hover:opacity-80"
+            onClick={() => setMode(!mode)}
+            size={18}
+          />
         </span>
       )}
 

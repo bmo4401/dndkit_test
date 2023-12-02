@@ -2,16 +2,22 @@
 import React, { useState, useTransition } from "react";
 import { Button as ButtonCustom } from "@/components/ui/Button";
 import { createForm } from "@/actions/form";
-import { useFormStatus } from "react-dom";
 import useModal from "@/hooks/useModal";
 import { cn } from "@/libs/utils";
 import { useRouter } from "next/navigation";
 const CreateFormModal = () => {
   const { show, setShow } = useModal();
-  const { pending } = useFormStatus();
+  const [isValid, setIsValid] = useState(true);
   const router = useRouter();
   const handleForm = async (formData: FormData) => {
     const name = formData.get("name") as string;
+    if (!name) {
+      setIsValid(false);
+      setTimeout(() => {
+        setIsValid(true);
+      }, 1000);
+      return;
+    }
     const description = formData.get("description") as string;
     const res = await createForm({ name, description });
     setShow(false);
@@ -67,11 +73,14 @@ const CreateFormModal = () => {
           />
         </div>
         <ButtonCustom
-          disabled={pending}
           type="submit"
-          className="gradient-button my-3  w-full border-none  text-lg font-semibold text-white outline-none"
+          className={cn(
+            "my-3  w-full border-none  text-lg font-semibold text-white outline-none",
+            !isValid ? "bg-rose-500" : "gradient-button",
+          )}
         >
-          Save
+          {isValid && "Save"}
+          {!isValid && "Please give form a name"}
         </ButtonCustom>
       </form>
     </div>

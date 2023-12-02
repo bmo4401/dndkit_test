@@ -1,7 +1,7 @@
 "use client";
 import useForms, { SelectedElementType } from "@/hooks/useForms";
 import { DndElementType } from "@/types/element";
-import { Heading2 } from "lucide-react";
+import { Heading2, PencilIcon } from "lucide-react";
 import { useState } from "react";
 interface DesignProps {
   element: SelectedElementType;
@@ -59,6 +59,11 @@ function Design({ element }: DesignProps) {
           }}
         >
           {input.length !== 0 ? input : Subtitle.type}
+          <PencilIcon
+            className="cursor-pointer text-slate-500 hover:opacity-80"
+            onClick={() => setMode(!mode)}
+            size={18}
+          />
         </span>
       )}
 

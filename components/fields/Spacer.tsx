@@ -2,7 +2,7 @@
 import useForms, { SelectedElementType } from "@/hooks/useForms";
 import { cn } from "@/libs/utils";
 import { DndElementType } from "@/types/element";
-import { SeparatorHorizontal } from "lucide-react";
+import { PencilIcon, SeparatorHorizontal } from "lucide-react";
 import { useState } from "react";
 interface DesignProps {
   element: SelectedElementType;
@@ -52,6 +52,11 @@ const Design: React.FC<DesignProps> = ({ element }) => {
             }}
           >
             <span className="text-slate-200">{space} px</span>
+            <PencilIcon
+              className="cursor-pointer  text-slate-500 hover:opacity-80"
+              onClick={() => setMode(!mode)}
+              size={18}
+            />
           </span>
         )}
       </div>
