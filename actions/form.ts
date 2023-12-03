@@ -36,7 +36,9 @@ export const createForm = async ({
   description?: string;
 }) => {
   try {
-    const res = await prisma.form.create({ data: { name, description } });
+    const res = await prisma.form.create({
+      data: { name, description, content: "" },
+    });
     revalidatePath("/");
     return res;
   } catch (error) {
