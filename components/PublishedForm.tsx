@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { cn } from "@/libs/utils";
 import { AttributeType } from "@/types/element";
 import { Form, Submission } from "@prisma/client";
+import { Check, RotateCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 const PublishedForm = ({
@@ -14,6 +15,8 @@ const PublishedForm = ({
   form: Form | (Submission & { name: string; description: string });
   isSubmitted?: boolean;
 }) => {
+  const [isSuccess, setIsSuccess] = useState(true);
+  const [isStick, setIsStick] = useState(false);
   const [isMounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -30,6 +33,8 @@ const PublishedForm = ({
   const validInput = ["Text", "TextArea"];
 
   const handleSubmit = async (formData: FormData) => {
+    setIsSuccess(false);
+
     let ids = [],
       data: (AttributeType & { id: string })[] = [];
     for (let i = 0; i < elements.length; i++) {
@@ -58,18 +63,27 @@ const PublishedForm = ({
     }
 
     const validData = JSON.stringify(elements);
-    await submitForm({ id: form.id, data: validData });
-    router.push("/");
+    const res = await submitForm({ id: form.id, data: validData });
+    if (res.id) {
+      setTimeout(() => {
+        setIsStick(true);
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsStick(false);
+        }, 1000);
+        router.push(`/published/${form.id}/view`);
+      }, 1000);
+    }
   };
   if (!isMounted) return null;
 
   return (
     <div
       className={cn(
-        "top-0 flex h-screen w-screen items-start justify-center overflow-hidden transition-all duration-300 ease-in-out",
+        "absolute top-4 flex h-screen w-screen items-start justify-center overflow-hidden transition-all duration-300 ease-in-out",
       )}
     >
-      <div className="scroll-bar relative z-20 mt-12 flex h-[80%] w-[50%] flex-col  gap-5 overflow-hidden overflow-y-auto rounded-lg border border-slate-500 bg-black pt-24">
+      <div className="scroll-bar relative z-20 flex h-[90%] w-[50%] flex-col  gap-5 overflow-hidden overflow-y-auto rounded-lg border border-slate-500 bg-black py-24">
         {/* absolute */}
         <div className="bg-gradient absolute left-0 top-0 flex h-20 w-[calc(100%)] items-center pl-5">
           {/* main line */}
@@ -100,7 +114,15 @@ const PublishedForm = ({
                   type="submit"
                   className="gradient-button w-full   rounded-full border-none  text-lg font-semibold text-white outline-none duration-200 hover:scale-105"
                 >
-                  Submit
+                  {isSuccess ? (
+                    isStick ? (
+                      <Check />
+                    ) : (
+                      "Save"
+                    )
+                  ) : (
+                    <RotateCw className="animate-spin opacity-80 duration-500" />
+                  )}
                 </Button>
               </div>
             )}

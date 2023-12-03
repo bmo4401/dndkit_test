@@ -4,6 +4,7 @@ import { Badge, CheckSquare, Eye, MoveRight, Pencil } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDistance } from "date-fns";
+import formImage from "@/public/form.png";
 import { Form } from "@prisma/client";
 export default function Card({ form }: { form: Form }) {
   return (
@@ -11,7 +12,7 @@ export default function Card({ form }: { form: Form }) {
       <div className="flex h-full max-w-[70%] flex-row items-start gap-3 px-3 ">
         <div className=" relative aspect-square w-20 self-start p-0">
           <Image
-            src={"/form.png"}
+            src={formImage}
             alt=""
             fill
             className="rounded-md object-cover "
@@ -47,9 +48,9 @@ export default function Card({ form }: { form: Form }) {
                   form.published ? "text-green-500 " : "text-slate-600",
                 )}
               />
-              {/*     <span className={cn(form.published ? '' : 'text-slate-600')}>
-                  {form.visits.toLocaleString()}
-                </span> */}
+              <span className={cn(form.published ? "" : "text-slate-600")}>
+                {form.views.toLocaleString()}
+              </span>
               <CheckSquare
                 className={cn(
                   "h-5 w-5",

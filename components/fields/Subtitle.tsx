@@ -85,7 +85,6 @@ interface FormProps {
   element: SelectedElementType;
 }
 function Form({ element }: FormProps) {
-  console.log("❄️ ~ file: Subtitle.tsx:83 ~ element:", element);
   const { input } = element.attribute?.form ?? element.attribute?.design;
   return (
     <div className="flex w-full px-3  pb-2 text-xs text-gray-600">

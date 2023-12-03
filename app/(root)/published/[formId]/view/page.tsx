@@ -10,7 +10,6 @@ interface ViewPageProps {
 const ViewPage: React.FC<ViewPageProps> = async ({ params: { formId } }) => {
   const form = await getForm({ id: +formId });
   const submittedForms = await getSubmissions({ id: +formId });
-  console.log("❄️ ~ file: page.tsx:12 ~ submittedForms:", submittedForms);
   const summarySubmissions = await getSummarySubmissions({ id: +formId });
   return (
     <View

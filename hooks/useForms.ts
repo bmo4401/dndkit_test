@@ -54,7 +54,6 @@ const useForms = create<State>((set, get) => ({
     const newElements = [...get().elements];
     const index = newElements.findIndex((el) => el.id === element.id);
     newElements[index] = element;
-    console.log(element);
     set((state) => ({
       elements: newElements,
     }));

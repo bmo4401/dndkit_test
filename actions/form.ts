@@ -52,7 +52,6 @@ export const saveForm = async ({
 }) => {
   try {
     const res = await prisma.form.update({ data: { content }, where: { id } });
-    revalidatePath("/");
     return res;
   } catch (error) {
     throw new Error("some thing went wrong");
@@ -71,7 +70,6 @@ export const publishForm = async ({
       data: { content, published: true },
       where: { id },
     });
-    revalidatePath("/");
     return res;
   } catch (error) {
     throw new Error("some thing went wrong");
@@ -86,10 +84,20 @@ export const submitForm = async ({
   data: string;
 }) => {
   try {
+    await prisma.form.update({
+      where: {
+        id,
+      },
+      data: {
+        submissions: {
+          increment: 1,
+        },
+      },
+    });
+    revalidatePath(`/published/${id}/view`);
     const res = await prisma.submission.create({
       data: { formId: id, content: data },
     });
-    revalidatePath("/");
     return res;
   } catch (error) {
     throw new Error("some thing went wrong");
@@ -132,9 +140,10 @@ export const getSubmission = async ({
   try {
     const res = await prisma.submission.findUnique({
       where: { formId: relativeFormId, id: submitId },
-      include: { Form: { select: { name: true, description: true } } },
+      include: {
+        Form: { select: { name: true, description: true } },
+      },
     });
-    revalidatePath("/");
     if (!res) {
       throw new Error("some thing went wrong");
     }
@@ -145,6 +154,7 @@ export const getSubmission = async ({
       createdAt,
       formId,
     } = res;
+
     return { id, content, createdAt, formId, name, description };
   } catch (error) {
     throw new Error("some thing went wrong");
@@ -166,8 +176,10 @@ export const getSubmissions = async ({ id }: { id: number }) => {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
-    revalidatePath("/");
     return res;
   } catch (error) {
     throw new Error("some thing went wrong");

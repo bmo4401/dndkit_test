@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import ContextProvider from "@/providers/ContextProvider";
-import { cn } from "@/libs/utils";
 import Navbar from "@/components/Navbar";
 import CreateFormModal from "@/components/modals/CreateFormModal";
-import PreviewModal from "@/components/modals/PreviewModal";
-import Loading from "@/components/modals/LoadingModal";
+import { cn } from "@/libs/utils";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,12 +25,11 @@ export default function RootLayout({
           "scroll-bar  h-screen w-screen  bg-black  text-white",
         )}
       >
-        <ContextProvider>
-          {/* modal */}
-          <CreateFormModal />
-          <Navbar />
-          {children}
-        </ContextProvider>
+        {/* modal */}
+        <CreateFormModal />
+
+        <Navbar />
+        {children}
       </body>
     </html>
   );

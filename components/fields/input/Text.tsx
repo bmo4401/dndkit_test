@@ -28,7 +28,7 @@ const Form: React.FC<FormProps> = ({ element, isSubmitted = false }) => {
     });
   };
   return (
-    <div className="flex  w-full items-center">
+    <div className="flex  w-full items-center py-2">
       <input
         disabled={isSubmitted}
         name={element.id}
