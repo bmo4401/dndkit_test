@@ -43,6 +43,9 @@ function Design({ element }: DesignProps) {
       {mode ? (
         <div className="h-fit w-full  gap-5  ">
           <input
+            onBlur={() => {
+              update();
+            }}
             value={input ?? ""}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
@@ -54,7 +57,8 @@ function Design({ element }: DesignProps) {
             autoFocus
             spellCheck={false}
           />
-          <input
+          {/*    <input
+            className="hover:cursor-pointer"
             id="required"
             type="checkbox"
             checked={isRequired}
@@ -62,7 +66,7 @@ function Design({ element }: DesignProps) {
           />
           <label htmlFor="required" className="pl-2">
             Required
-          </label>
+          </label> */}
         </div>
       ) : (
         <span

@@ -39,6 +39,7 @@ function Design({ element }: DesignProps) {
       {mode ? (
         <div className="flex gap-5">
           <input
+            onBlur={() => update()}
             value={input ?? ""}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
