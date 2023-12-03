@@ -71,8 +71,12 @@ const DetailInfo = ({
         <div className="flex w-[calc(100%-7rem)] items-start justify-start gap-3 ">
           <span>:</span>
 
-          <Link href={`/published/${form.id}`} className="hover:opacity-80">
+          <Link
+            href={`/published/${form.id}`}
+            className="flex items-center gap-2 opacity-80 hover:opacity-100"
+          >
             <MousePointerSquare className="text-subPrimary" size={25} />
+            <span className="text-slate-500 underline hover:text-white">{`${process.env.NEXT_PUBLIC_URL}/published/${form.id}`}</span>
           </Link>
         </div>
       </div>
