@@ -16,7 +16,7 @@ model Form {
   published   Boolean  @default(false)
   name        String
   description String   @default("")
-  content     String   @default("") @db.Text
+  content     String   @db.LongText
   url         String   @unique @default(uuid())
 
   submissions Int          @default(0)
@@ -29,7 +29,7 @@ model Submission {
   createdAt DateTime @default(now())
   formId    Int
   Form      Form     @relation(fields: [formId], references: [id])
-  content   String   @default("") @db.Text
+  content   String   @db.LongText
 
   @@index([formId])
 }

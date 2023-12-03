@@ -58,8 +58,9 @@ const DndNavbar = ({ id }: { id: number }) => {
           });
           if (res.id) {
             setIsLoading(false);
-
             router.push(`/published/${res.id}`);
+          } else {
+            throw new Error("Some thing wen wrong");
           }
         }}
       >
