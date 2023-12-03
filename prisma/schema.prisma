@@ -30,4 +30,6 @@ model Submission {
   formId    Int
   Form      Form     @relation(fields: [formId], references: [id])
   content   String   @default("[]")
+
+  @@index([formId])
 }

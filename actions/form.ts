@@ -23,6 +23,7 @@ export const getForm = async ({ id }: { id: number }) => {
     if (!res) throw new Error("some thing went wrong");
     return res;
   } catch (error) {
+    console.log("❄️ ~ file: form.ts:26 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
@@ -39,6 +40,7 @@ export const createForm = async ({
     revalidatePath("/");
     return res;
   } catch (error) {
+    console.log("❄️ ~ file: form.ts:42 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
@@ -54,6 +56,7 @@ export const saveForm = async ({
     const res = await prisma.form.update({ data: { content }, where: { id } });
     return res;
   } catch (error) {
+    console.log("❄️ ~ file: form.ts:57 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
@@ -72,6 +75,7 @@ export const publishForm = async ({
     });
     return res;
   } catch (error) {
+    console.log("❄️ ~ file: form.ts:75 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
@@ -100,6 +104,7 @@ export const submitForm = async ({
     });
     return res;
   } catch (error) {
+    console.log("❄️ ~ file: form.ts:107 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
@@ -126,6 +131,7 @@ export const getSummaryForms = async () => {
       totalSubmit,
     };
   } catch (error) {
+    console.log("❄️ ~ file: form.ts:134 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
@@ -157,6 +163,7 @@ export const getSubmission = async ({
 
     return { id, content, createdAt, formId, name, description };
   } catch (error) {
+    console.log("❄️ ~ file: form.ts:166 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
@@ -182,6 +189,7 @@ export const getSubmissions = async ({ id }: { id: number }) => {
     });
     return res;
   } catch (error) {
+    console.log("❄️ ~ file: form.ts:192 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
@@ -209,6 +217,7 @@ export const getSummarySubmissions = async ({ id }: { id: number }) => {
       targetSubmit,
     };
   } catch (error) {
+    console.log("❄️ ~ file: form.ts:220 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
