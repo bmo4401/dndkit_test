@@ -75,6 +75,7 @@ export const publishForm = async ({
       data: { content, published: true },
       where: { id },
     });
+    revalidatePath("/");
     return res;
   } catch (error) {
     console.log("❄️ ~ file: form.ts:75 ~ error:", error);
