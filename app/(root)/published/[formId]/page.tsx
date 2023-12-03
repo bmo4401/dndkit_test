@@ -8,7 +8,7 @@ interface BuilderPageProps {
 const PublishedPage: React.FC<BuilderPageProps> = async ({
   params: { formId },
 }) => {
-  const form = await getForm({ id: +formId });
+  const form = await getForm({ id: +formId, isView: true });
 
   return <PublishedForm form={form} />;
 };

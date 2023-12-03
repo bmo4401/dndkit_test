@@ -103,7 +103,10 @@ export async function SummaryCards({
         title="Submission target"
         icon={<ArrowUpRight size={30} className=" text-red-600" />}
         helperText="Target for submissions"
-        value={summarySubmissions?.targetSubmit.toLocaleString() + "%" ?? ""}
+        value={
+          `${summarySubmissions?.totalSubmit.toLocaleString()}/${summarySubmissions?.targetSubmit.toLocaleString()}` ??
+          ""
+        }
         className="shadow-md shadow-red-600"
       />
       <SummaryCard

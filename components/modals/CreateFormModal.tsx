@@ -1,27 +1,39 @@
 "use client";
-import React, { useState, useTransition } from "react";
-import { Button as ButtonCustom } from "@/components/ui/Button";
 import { createForm } from "@/actions/form";
+import { Button as ButtonCustom } from "@/components/ui/Button";
 import useModal from "@/hooks/useModal";
 import { cn } from "@/libs/utils";
+import { RotateCw } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 const CreateFormModal = () => {
-  const { show, setShow } = useModal();
+  const [isLoading, setIsLoading] = useState(false);
   const [isValid, setIsValid] = useState(true);
+  const { show, setShow } = useModal();
+
   const router = useRouter();
   const handleForm = async (formData: FormData) => {
+    setIsLoading(true);
     const name = formData.get("name") as string;
     if (!name) {
       setIsValid(false);
       setTimeout(() => {
         setIsValid(true);
+        setIsLoading(false);
       }, 1000);
       return;
     }
+
     const description = formData.get("description") as string;
+
     const res = await createForm({ name, description });
-    setShow(false);
-    router.push(`/builder/${res.id}`);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    if (res.id) {
+      setShow(false);
+      router.push(`/builder/${res.id}`);
+    }
   };
 
   return (
@@ -75,12 +87,19 @@ const CreateFormModal = () => {
         <ButtonCustom
           type="submit"
           className={cn(
-            "my-3  w-full border-none  text-lg font-semibold text-white outline-none",
+            "my-3  w-full cursor-pointer  border-none text-lg font-semibold text-white outline-none hover:opacity-80",
             !isValid ? "bg-rose-500" : "gradient-button",
           )}
         >
-          {isValid && "Save"}
-          {!isValid && "Please give form a name"}
+          {isLoading === false ? (
+            isValid ? (
+              "Save"
+            ) : (
+              "Please give a name to the form"
+            )
+          ) : (
+            <RotateCw className="animate-spin opacity-80 duration-500" />
+          )}
         </ButtonCustom>
       </form>
     </div>

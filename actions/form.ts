@@ -10,13 +10,19 @@ export const getForms = () => {
   }
 };
 
-export const getForm = async ({ id }: { id: number }) => {
+export const getForm = async ({
+  id,
+  isView = false,
+}: {
+  id: number;
+  isView?: boolean;
+}) => {
   try {
     const res = await prisma.form.update({
       where: { id },
       data: {
         views: {
-          increment: 1,
+          increment: isView ? 1 : 0,
         },
       },
     });
@@ -212,7 +218,7 @@ export const getSummarySubmissions = async ({ id }: { id: number }) => {
     const views = res._sum.views ?? 0;
     const totalSubmit = res._sum.submissions ?? 0;
     const rateSubmit = ((views ? totalSubmit / views : 0) * 100).toFixed(2);
-    const targetSubmit = totalSubmit / 10;
+    const targetSubmit = 10;
     return {
       views,
       rateSubmit,
