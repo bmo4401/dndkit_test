@@ -73,10 +73,10 @@ const DetailInfo = ({
 
           <Link
             href={`/published/${form.id}`}
-            className="flex items-center gap-2 opacity-80 hover:opacity-100"
+            className="group flex items-center gap-2 opacity-80 hover:opacity-100"
           >
             <MousePointerSquare className="text-subPrimary" size={25} />
-            <span className="text-slate-500 underline hover:text-white">{`${process.env.NEXT_PUBLIC_URL}/published/${form.id}`}</span>
+            <span className="text-slate-500 underline group-hover:text-white">{`${process.env.NEXT_PUBLIC_URL}/published/${form.id}`}</span>
           </Link>
         </div>
       </div>

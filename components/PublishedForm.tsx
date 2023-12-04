@@ -80,10 +80,10 @@ const PublishedForm = ({
   return (
     <div
       className={cn(
-        "absolute top-4 flex h-screen w-screen items-start justify-center overflow-hidden transition-all duration-300 ease-in-out",
+        "flex h-screen w-screen items-start justify-center overflow-hidden transition-all duration-300 ease-in-out",
       )}
     >
-      <div className="scroll-bar relative z-20 flex h-[90%] w-[50%] flex-col  gap-5 overflow-hidden overflow-y-auto rounded-lg border border-slate-500 bg-black py-24">
+      <div className="scroll-bar relative z-20 flex max-h-[90%] w-[50%] flex-col  gap-5 overflow-hidden overflow-y-auto rounded-lg border border-slate-500 bg-black py-24">
         {/* absolute */}
         <div className="bg-gradient absolute left-0 top-0 flex h-20 w-[calc(100%)] items-center pl-5">
           {/* main line */}

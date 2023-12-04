@@ -62,15 +62,32 @@ input[type="number"].hidden-control {
 .scroll-bar {
   overflow-x: hidden;
 }
+
 .scroll-bar::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: #ffffff4c;
 }
 .scroll-bar::-webkit-scrollbar-track {
   box-shadow: inset #fff;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 .scroll-bar::-webkit-scrollbar {
   width: 10px;
   background-color: transparent;
+}
+
+.scroll-bar #table {
+  overflow-x: scroll;
+}
+.scroll-bar #table::-webkit-scrollbar-thumb {
+  background-color: #64748b;
+  border-radius: 999999px;
+  width: 3px;
+  height: 3px;
+  border: 1px;
+}
+
+.scroll-bar #table::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
 }
