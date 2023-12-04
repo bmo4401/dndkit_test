@@ -26,7 +26,7 @@ const View = ({
   return (
     <main className="flex w-full flex-col justify-around gap-5  px-5 pb-10">
       <Heading text={"Submitted Forms"} />
-      <div className="gap-15  flex justify-center px-5">
+      <div className="flex  justify-center gap-16 px-5">
         {" "}
         <FormTable submittedForms={submittedForms} />
         <PublishedSummary form={form} summarySubmissions={summarySubmissions} />
