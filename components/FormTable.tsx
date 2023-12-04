@@ -142,7 +142,7 @@ const FormTable = ({
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <div id="table" className="scroll-bar h-fit w-fit max-w-[50%] ">
+    <div id="table" className="scroll-bar h-fit w-[50%] max-w-[50%] ">
       {data.length !== 0 && (
         <table className="max-w-[50%] rounded-md  border border-slate-500">
           {/* Header */}
