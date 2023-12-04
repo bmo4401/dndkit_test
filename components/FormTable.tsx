@@ -143,7 +143,7 @@ const FormTable = ({
   });
   return (
     <div id="table" className="scroll-bar h-fit w-fit max-w-[50%] ">
-      {data && (
+      {data.length !== 0 && (
         <table className="max-w-[50%] rounded-md  border border-slate-500">
           {/* Header */}
           <thead className="border-b border-slate-500">
@@ -222,7 +222,7 @@ const FormTable = ({
         </tfoot> */}
         </table>
       )}
-      {!data && <Empty />}
+      {data.length === 0 && <Empty />}
     </div>
   );
 };
