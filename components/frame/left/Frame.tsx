@@ -1,6 +1,6 @@
 "use client";
-import { FormElements } from "@/components/data";
 import FrameElement from "@/components/frame/left/FrameElement";
+import { FormElements } from "@/components/frame/right/Sidebar";
 import useForms from "@/hooks/useForms";
 import { cn, generateId } from "@/libs/utils";
 import { useDndMonitor, useDroppable } from "@dnd-kit/core";
@@ -38,9 +38,8 @@ const Frame = ({ form }: { form: Form }) => {
       }
     },
   });
-
   return (
-    <div className="flex h-full w-full justify-center pb-10">
+    <div className={cn(" flex h-full w-full justify-center  ")}>
       {/*       <div className="scroll-bar h-screen w-[40%] overflow-hidden overflow-y-auto">
         {elements?.length &&
           elements.map((element) => {

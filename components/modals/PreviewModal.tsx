@@ -4,9 +4,9 @@ import useModal from "@/hooks/useModal";
 import { cn } from "@/libs/utils";
 import useForms from "@/hooks/useForms";
 import { Form } from "@prisma/client";
-import { FormElements } from "@/components/data";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { FormElements } from "@/components/frame/right/Sidebar";
 const PreviewModal = ({ form }: { form: Form }) => {
   const { setShowPreviewModal, showPreviewModal } = useModal();
   const { elements } = useForms();

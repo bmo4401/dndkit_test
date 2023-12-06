@@ -1,7 +1,29 @@
 "use client";
 
-import { InputComponents, TitleComponents } from "@/components/data";
 import DndElement from "@/components/frame/right/DndElement";
+import Separator from "@/components/fields/title/Separator";
+import Spacer from "@/components/fields/title/Spacer";
+import Subtitle from "@/components/fields/title/Subtitle";
+import Text from "@/components/fields/input/Text";
+import TextArea from "@/components/fields/input/TextArea";
+import Checkbox from "@/components/fields/input/Checkbox";
+import Title from "@/components/fields/title/Title";
+import Select from "@/components/fields/input/Select";
+export const FormElements = {
+  /* input */
+  [Text.type]: Text,
+  [TextArea.type]: TextArea,
+  [Checkbox.type]: Checkbox,
+  [Select.type]: Select,
+  /* title */
+  [Title.type]: Title,
+  [Subtitle.type]: Subtitle,
+  [Spacer.type]: Spacer,
+  [Separator.type]: Separator,
+};
+export const TitleComponents = [Title, Subtitle, Spacer, Separator];
+
+export const InputComponents = [Text, TextArea, Checkbox, Select];
 
 const DndElements = () => {
   return (

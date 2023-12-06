@@ -22,6 +22,7 @@ const DndNavbar = ({ id }: { id: number }) => {
         onClick={async () => {
           setIsSuccess(false);
           const res = await saveForm({ id, content: JSON.stringify(elements) });
+          console.log("❄️ ~ file: DndNavbar.tsx:25 ~ res:", res);
 
           if (res.id) {
             setTimeout(() => {

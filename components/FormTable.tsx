@@ -16,8 +16,8 @@ type SubmittedFormType = {
   id: number;
   submittedAt: string;
   view: string;
-  design: any;
-  form: any;
+  /*   design: any;
+  form: any; */
 };
 
 type AttributeType = {
@@ -35,12 +35,15 @@ type ValidDataType = {
     input: string;
   };
   form: { input: string };
+  id: string;
 };
 
 const validField: Record<string, boolean> = {
   Title: true,
   Text: true,
   TextArea: true,
+  Checkbox: true,
+  Select: true,
 };
 
 const FormTable = ({
@@ -56,37 +59,45 @@ const FormTable = ({
       submittedForms.map((item) => {
         let validData = JSON.parse(item.content) as AttributeType[];
         validData = validData.filter((item) => validField[item.type]);
-        const newData = validData.reduce<AttributeType[]>((acc, item, i) => {
-          if (i + 1 === validData.length) return acc;
-          if (!validData[i].attribute.design?.input) return acc;
-          const newAttribute = {
-            ...item.attribute,
-            form: {
-              input: "",
-            },
-          };
-          newAttribute.form.input = validData[i + 1].attribute.form?.input;
-
-          return acc.concat({
-            ...item,
-            attribute: newAttribute,
-          });
-        }, []);
-
-        setInfo(newData.map((item) => item.attribute));
+        const newData: { [id: string]: ValidDataType[] } = {};
+        for (let i = 0, j = 0; i < validData.length || j < validData.length; ) {
+          if (validData[i].type === "Title") {
+            console.log(
+              "❄️ ~ file: FormTable.tsx:69 ~ validData[i].type:",
+              validData[i].type,
+            );
+            while (validData[j].type === "Title") {
+              const {
+                id,
+                attribute: { design, form },
+              } = validData[j];
+              console.log(
+                "❄️ ~ file: FormTable.tsx:78 ~ validData[j]:",
+                validData[j],
+              );
+              if (!newData[validData[i].id]) newData[validData[i].id] = [];
+              newData[validData[i].id].push({ design, form, id });
+              j++;
+            }
+          } else {
+            j++;
+          }
+          i = j;
+        }
+        console.log(newData);
+        /*       setInfo(newData.map((item) => item.attribute));
         const ob = Object.fromEntries(
           newData.map((item, index) => [
             item.attribute.design.input,
             item.attribute.form.input,
           ]),
-        );
+        );  */
 
         return {
           id: item.id,
           submittedAt: formatDistance(item.createdAt, new Date(), {
             addSuffix: true,
           }),
-          ...ob,
           view: `/published/${item.formId}/view/${item.id}`,
         };
       }),
@@ -124,7 +135,8 @@ const FormTable = ({
         return info.getValue();
       },
       header: ({ header }) => {
-        return <span>Submitted At</span>;
+        return;
+        <span>Submitted At</span>;
       },
     }),
     columnHelper.accessor("view", {

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormElements } from "@/components/data";
+import { FormElements } from "@/components/frame/right/Sidebar";
 import useForms from "@/hooks/useForms";
 import { cn, generateId } from "@/libs/utils";
 import { AttributeType, DndElementType } from "@/types/element";
@@ -39,8 +39,10 @@ const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
       id,
     },
   });
+
   useDndMonitor({
     onDragEnd: ({ active, over }) => {
+      const isDelete = over === null;
       const type = active.data.current?.type;
       const isHandler = active.data.current?.isHandler;
 
@@ -52,7 +54,11 @@ const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
 
       isTopHalf && index;
       isBottomHalf && index++;
-      /* Case 1: insert to top or bottom of existing element */
+      /* Case 1: Delete */
+      if (isHandler && isDelete) {
+        removeElement(removeId);
+      }
+      /* Case 2: insert to top or bottom of existing element */
       if ((isTopHalf || isBottomHalf) && id === activeId) {
         if (isHandler) {
           removeElement(removeId);
@@ -105,7 +111,7 @@ const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
             </h2>
           )}
         </div>
-        {/* top half */}
+        {/* bottom half */}
         <div
           ref={bottomHalf.setNodeRef}
           className={cn(

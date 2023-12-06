@@ -19,16 +19,16 @@ const DndContainer = ({ form }: { form: Form }) => {
   }, [form.id]);
   return (
     <DndProvider>
-      <div className="scroll-bar flex w-full flex-col justify-between gap-3 px-5">
+      <div className=" scroll-bar flex w-full flex-col justify-between gap-3 px-5">
         <PreviewModal form={form} />
-        <div className="flex items-center justify-between">
+        <div className=" flex items-center justify-between">
           {" "}
           <Heading text={form.name}>
             <DndNavbar id={form.id} />
           </Heading>
         </div>
 
-        <div className="flex h-full w-full justify-between">
+        <div className="flex h-full w-full justify-between ">
           <Frame form={form} />
           <DndElements />
         </div>

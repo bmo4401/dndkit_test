@@ -152,6 +152,8 @@ export const getSubmission = async ({
   formId: number;
   submitId: number;
 }) => {
+  console.log("❄️ ~ file: form.ts:155 ~ formId:", relativeFormId);
+  console.log("❄️ ~ file: form.ts:155 ~ submitId:", submitId);
   try {
     const res = await prisma.submission.findUnique({
       where: { formId: relativeFormId, id: submitId },
