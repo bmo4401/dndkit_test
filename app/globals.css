@@ -91,3 +91,7 @@ input[type="number"].hidden-control {
   width: 5px;
   height: 10px;
 }
+
+select::-ms-expand {
+  display: none;
+}

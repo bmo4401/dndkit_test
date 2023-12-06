@@ -57,16 +57,6 @@ function Design({ element }: DesignProps) {
             autoFocus
             spellCheck={false}
           />
-          {/*    <input
-            className="hover:cursor-pointer"
-            id="required"
-            type="checkbox"
-            checked={isRequired}
-            onChange={() => setIsRequired(!isRequired)}
-          />
-          <label htmlFor="required" className="pl-2">
-            Required
-          </label> */}
         </div>
       ) : (
         <span

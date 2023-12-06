@@ -3,23 +3,23 @@ import { createForm } from "@/actions/form";
 import { Button as ButtonCustom } from "@/components/ui/Button";
 import useModal from "@/hooks/useModal";
 import { cn } from "@/libs/utils";
-import { RotateCw } from "lucide-react";
+import { Check, RotateCw } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState, useTransition } from "react";
+import { useFormStatus } from "react-dom";
 const CreateFormModal = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [check, setCheck] = useState(false);
+
   const [isValid, setIsValid] = useState(true);
   const { show, setShow } = useModal();
-
+  const ref = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const handleForm = async (formData: FormData) => {
-    setIsLoading(true);
     const name = formData.get("name") as string;
     if (!name) {
       setIsValid(false);
       setTimeout(() => {
         setIsValid(true);
-        setIsLoading(false);
       }, 1000);
       return;
     }
@@ -27,12 +27,13 @@ const CreateFormModal = () => {
     const description = formData.get("description") as string;
 
     const res = await createForm({ name, description });
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
     if (res.id) {
-      setShow(false);
-      router.push(`/builder/${res.id}`);
+      setCheck(true);
+      setTimeout(() => {
+        ref.current?.reset();
+        router.push(`/builder/${res.id}`);
+        setShow(false);
+      }, 500);
     }
   };
 
@@ -49,6 +50,7 @@ const CreateFormModal = () => {
         className="absolute inset-0 h-full w-full overflow-hidden bg-black/80 opacity-80"
       />
       <form
+        ref={ref}
         action={handleForm}
         className="z-10 flex w-[30%] flex-col justify-center gap-5 rounded-md border border-white bg-black px-5 py-5"
       >
@@ -84,26 +86,41 @@ const CreateFormModal = () => {
             py-2   text-black outline-none focus:outline-primary"
           />
         </div>
-        <ButtonCustom
-          type="submit"
-          className={cn(
-            "my-3  w-full cursor-pointer  border-none text-lg font-semibold text-white outline-none hover:opacity-80",
-            !isValid ? "bg-rose-500" : "gradient-button",
-          )}
-        >
-          {isLoading === false ? (
-            isValid ? (
-              "Save"
-            ) : (
-              "Please give a name to the form"
-            )
-          ) : (
-            <RotateCw className="animate-spin opacity-80 duration-500" />
-          )}
-        </ButtonCustom>
+        <SubmitForm isValid={isValid} check={check} />
       </form>
     </div>
   );
 };
 
+const SubmitForm = ({
+  isValid,
+  check,
+}: {
+  isValid: boolean;
+  check: boolean;
+}) => {
+  const { pending } = useFormStatus();
+  return (
+    <ButtonCustom
+      aria-disabled={pending}
+      type="submit"
+      className={cn(
+        "my-3  w-full cursor-pointer  border-none text-lg font-semibold text-white outline-none hover:opacity-80",
+        !isValid ? "bg-rose-500" : "gradient-button",
+      )}
+    >
+      {pending === false ? (
+        isValid ? (
+          "Save"
+        ) : (
+          "Please give a name to the form"
+        )
+      ) : check ? (
+        <Check />
+      ) : (
+        <RotateCw className="animate-spin opacity-80 duration-500" />
+      )}
+    </ButtonCustom>
+  );
+};
 export default CreateFormModal;

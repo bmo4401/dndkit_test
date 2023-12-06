@@ -1,13 +1,20 @@
 "use client";
 import { submitForm } from "@/actions/form";
-import { FormElements } from "@/components/data";
+import { FormElements } from "@/components/frame/right/Sidebar";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/libs/utils";
-import { AttributeType } from "@/types/element";
+import { AttributeType, ElementType } from "@/types/element";
 import { Form, Submission } from "@prisma/client";
 import { Check, RotateCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
+const validInput: Partial<ElementType>[] = [
+  "Text",
+  "TextArea",
+  "Checkbox",
+  "Select",
+];
 const PublishedForm = ({
   form,
   isSubmitted = false,
@@ -15,12 +22,7 @@ const PublishedForm = ({
   form: Form | (Submission & { name: string; description: string });
   isSubmitted?: boolean;
 }) => {
-  const [isSuccess, setIsSuccess] = useState(true);
-  const [isStick, setIsStick] = useState(false);
-  const [isMounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [check, setCheck] = useState(false);
   const [elements, setElements] = useState<(AttributeType & { id: string })[]>(
     [],
   );
@@ -30,11 +32,8 @@ const PublishedForm = ({
       setElements(JSON.parse(form.content));
     }
   }, [form.id]);
-  const validInput = ["Text", "TextArea"];
 
   const handleSubmit = async (formData: FormData) => {
-    setIsSuccess(false);
-
     let ids = [],
       data: (AttributeType & { id: string })[] = [];
     for (let i = 0; i < elements.length; i++) {
@@ -44,6 +43,7 @@ const PublishedForm = ({
     }
     for (let i = 0; i < ids.length; i++) {
       const input = formData.get(ids[i].id);
+      console.log("❄️ ~ file: PublishedForm.tsx:48 ~ input:", input);
       data.push({
         id: ids[i].id,
         icon: ids[i].icon,
@@ -61,21 +61,15 @@ const PublishedForm = ({
         }
       }
     }
-
     const validData = JSON.stringify(elements);
     const res = await submitForm({ id: form.id, data: validData });
     if (res.id) {
+      setCheck(true);
       setTimeout(() => {
-        setIsStick(true);
-        setIsSuccess(true);
-        setTimeout(() => {
-          setIsStick(false);
-        }, 1000);
         router.push(`/published/${form.id}/view`);
       }, 1000);
     }
   };
-  if (!isMounted) return null;
 
   return (
     <div
@@ -108,24 +102,7 @@ const PublishedForm = ({
                 );
               })}
             </div>
-            {!isSubmitted && (
-              <div className="w-full px-5">
-                <Button
-                  type="submit"
-                  className="gradient-button w-full   rounded-full border-none  text-lg font-semibold text-white outline-none duration-200 hover:scale-105"
-                >
-                  {isSuccess ? (
-                    isStick ? (
-                      <Check />
-                    ) : (
-                      "Save"
-                    )
-                  ) : (
-                    <RotateCw className="animate-spin opacity-80 duration-500" />
-                  )}
-                </Button>
-              </div>
-            )}
+            <SubmitForm isSubmitted={isSubmitted} check={check} />
           </form>
         </>
       </div>
@@ -133,4 +110,31 @@ const PublishedForm = ({
   );
 };
 
+const SubmitForm = ({
+  isSubmitted,
+  check,
+}: {
+  isSubmitted: boolean;
+  check: boolean;
+}) => {
+  const formStatus = useFormStatus();
+
+  return (
+    <div className="w-full px-5">
+      <Button
+        disabled={isSubmitted ?? formStatus.pending}
+        type="submit"
+        className="gradient-button w-full   rounded-full border-none  text-lg font-semibold text-white outline-none duration-200 hover:scale-105 hover:cursor-pointer"
+      >
+        {!formStatus.pending ? (
+          "Save"
+        ) : check ? (
+          <Check />
+        ) : (
+          <RotateCw className="animate-spin opacity-80 duration-500" />
+        )}
+      </Button>
+    </div>
+  );
+};
 export default PublishedForm;
