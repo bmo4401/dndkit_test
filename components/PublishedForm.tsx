@@ -42,8 +42,12 @@ const PublishedForm = ({
       }
     }
     for (let i = 0; i < ids.length; i++) {
-      const input = formData.get(ids[i].id);
-      console.log("❄️ ~ file: PublishedForm.tsx:48 ~ input:", input);
+      let input =
+        formData.get(ids[i].id) === "true"
+          ? "✓"
+          : formData.get(ids[i].id) === ""
+            ? "(empty)"
+            : formData.get(ids[i].id);
       data.push({
         id: ids[i].id,
         icon: ids[i].icon,

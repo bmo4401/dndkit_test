@@ -8,7 +8,6 @@ import { Form } from "@prisma/client";
 
 const Frame = ({ form }: { form: Form }) => {
   const { elements, addElement, setElements } = useForms();
-
   const droppable = useDroppable({
     id: "-drop-area",
     data: {

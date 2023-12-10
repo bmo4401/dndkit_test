@@ -76,7 +76,7 @@ const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
       }
     },
   });
-  if (handlerDrag.isDragging) return null;
+  if (handlerDrag.isDragging) return;
   return (
     <div className="flex w-full justify-between  gap-3 rounded-md  pb-2">
       <div

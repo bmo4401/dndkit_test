@@ -1,8 +1,8 @@
 "use client";
 import Empty from "@/components/Empty";
 import { SubmissionType } from "@/components/View";
+import { cn } from "@/libs/utils";
 import {
-  Table,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -16,8 +16,8 @@ type SubmittedFormType = {
   id: number;
   submittedAt: string;
   view: string;
-  /*   design: any;
-  form: any; */
+  design: any;
+  form: any;
 };
 
 type AttributeType = {
@@ -35,15 +35,13 @@ type ValidDataType = {
     input: string;
   };
   form: { input: string };
-  id: string;
 };
 
 const validField: Record<string, boolean> = {
-  Title: true,
   Text: true,
   TextArea: true,
-  Checkbox: true,
   Select: true,
+  Checkbox: true,
 };
 
 const FormTable = ({
@@ -57,47 +55,27 @@ const FormTable = ({
   useEffect(() => {
     setData(
       submittedForms.map((item) => {
-        let validData = JSON.parse(item.content) as AttributeType[];
-        validData = validData.filter((item) => validField[item.type]);
-        const newData: { [id: string]: ValidDataType[] } = {};
-        for (let i = 0, j = 0; i < validData.length || j < validData.length; ) {
-          if (validData[i].type === "Title") {
-            console.log(
-              "❄️ ~ file: FormTable.tsx:69 ~ validData[i].type:",
-              validData[i].type,
-            );
-            while (validData[j].type === "Title") {
-              const {
-                id,
-                attribute: { design, form },
-              } = validData[j];
-              console.log(
-                "❄️ ~ file: FormTable.tsx:78 ~ validData[j]:",
-                validData[j],
-              );
-              if (!newData[validData[i].id]) newData[validData[i].id] = [];
-              newData[validData[i].id].push({ design, form, id });
-              j++;
-            }
-          } else {
-            j++;
-          }
-          i = j;
-        }
-        console.log(newData);
-        /*       setInfo(newData.map((item) => item.attribute));
+        let rawData = JSON.parse(item.content) as AttributeType[];
+        rawData = rawData.filter((item) => validField[item.type]);
+
+        const validData = rawData.map((item) => {
+          return { ...item.attribute };
+        });
+
+        setInfo(validData.map((item) => item));
         const ob = Object.fromEntries(
-          newData.map((item, index) => [
-            item.attribute.design.input,
-            item.attribute.form.input,
+          validData.map((item, index) => [
+            item.design?.input,
+            item.form?.input,
           ]),
-        );  */
+        );
 
         return {
           id: item.id,
           submittedAt: formatDistance(item.createdAt, new Date(), {
             addSuffix: true,
           }),
+          ...ob,
           view: `/published/${item.formId}/view/${item.id}`,
         };
       }),
@@ -119,7 +97,7 @@ const FormTable = ({
           return rows[item.design.input] as string;
         },
         {
-          id: item.design.input,
+          id: item.design?.input,
           cell: (info) => {
             return info.getValue();
           },
@@ -135,8 +113,7 @@ const FormTable = ({
         return info.getValue();
       },
       header: ({ header }) => {
-        return;
-        <span>Submitted At</span>;
+        return <span>Submitted At</span>;
       },
     }),
     columnHelper.accessor("view", {
@@ -154,7 +131,13 @@ const FormTable = ({
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <div id="table" className="scroll-bar h-fit w-[50%] max-w-[50%] ">
+    <div
+      id="table"
+      className={cn(
+        "scroll-bar h-fit max-w-[70%] ",
+        data.length !== 0 && "border border-slate-500",
+      )}
+    >
       {data.length !== 0 && (
         <table className="max-w-[50%] rounded-md  border border-slate-500">
           {/* Header */}
@@ -164,7 +147,7 @@ const FormTable = ({
                 {headerGroup.headers.map((header) => {
                   return (
                     <th
-                      className="w-fit max-w-[12rem] break-words border-l border-slate-500 bg-subPrimary px-10 text-base"
+                      className="min-w-[6rem] max-w-[12rem] break-words border-l border-slate-500 bg-subPrimary px-2 align-top text-sm"
                       key={header.id}
                     >
                       {header.isPlaceholder

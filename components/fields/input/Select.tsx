@@ -16,15 +16,23 @@ import {
 import { Fragment, useEffect, useState } from "react";
 
 function Design({ element }: { element: SelectedElementType }) {
+  const [input, setInput] = useState(
+    element.attribute?.design.input || Select.type,
+  );
   const { updateElement } = useForms();
   const [mode, setMode] = useState(false);
+
   const [options, setOptions] = useState<string[]>(
-    element.attribute?.design.input,
+    element.attribute?.design?.options,
   );
-  console.log("❄️ ~ file: Select.tsx:24 ~ options:", options);
-  const [isRequired, setIsRequired] = useState(
-    element.attribute?.design.isRequired,
+  const [isRequired] = useState(element.attribute?.design.isRequired);
+  const [selected, setSelected] = useState(
+    element.attribute?.design?.options[0],
   );
+
+  /*   useEffect(() => {
+    setSelected(element.attribute?.design?.options[0]);
+  }, [element.attribute?.design?.options]); */
   const addOption = ({ index }: { index: number }) => {
     const newOptions = [...options];
     newOptions.splice(index, 0, "");
@@ -54,7 +62,8 @@ function Design({ element }: { element: SelectedElementType }) {
         attribute: {
           form: { ...element.attribute?.form },
           design: {
-            input: options,
+            input,
+            options,
           },
         },
       },
@@ -62,71 +71,162 @@ function Design({ element }: { element: SelectedElementType }) {
     setMode(!mode);
   };
   return (
-    <div className=" relative  flex  w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
+    <div className="relative flex  min-h-[6rem]  w-full flex-col items-start justify-between  rounded-md border border-slate-500 px-6 py-3">
       {mode ? (
-        <div className="flex h-fit w-full flex-col  ">
+        <div className="flex h-fit w-full flex-col gap-2 ">
+          <div className="flex  w-full flex-col items-start gap-1">
+            <input
+              value={input ?? Select.type}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                e.key === "Enter" && update();
+              }}
+              placeholder="Give a name"
+              className=" h-10 w-full rounded-md border border-slate-500 bg-transparent px-3 text-sm"
+            />
+            {/* Description */}
+            <p className="text-xs text-slate-500">
+              <span className="text-rose-500">*</span> Please enter a name for
+              this field to collect data in the table.
+            </p>
+          </div>
           {options.map((option, index) => (
             <div className="flex items-center gap-2">
               <input
-                key={option}
+                /* bug: using an option as a key will un-focus the input field with each type because React will rerender components with a new key */
+                key={index}
                 value={option}
-                onChange={(e) =>
+                onChange={(e) => {
                   updateOptions({
                     index,
                     value: e.target.value,
-                  })
-                }
+                  });
+                }}
                 onKeyDown={(e) => {
                   e.key === "Enter" && update();
                 }}
-                className="w-1/2 border border-slate-500 bg-transparent px-3 py-2 text-white outline-none"
-                placeholder={option}
-                autoComplete="off"
-                autoFocus
+                className="w-1/2 rounded-md border border-slate-500 bg-transparent px-3 py-1 text-white outline-none"
                 spellCheck={false}
               />
               <Plus
                 onClick={() => addOption({ index: index + 1 })}
+                size={20}
                 className="text-subPrimary"
               />
               <Minus
                 onClick={() => removeOption({ index: index })}
+                size={20}
                 className="text-rose-500"
               />
             </div>
           ))}
           <Button
             onClick={update}
-            className="absolute bottom-3 right-3 border-none bg-subPrimary"
+            className="absolute bottom-3 right-3 h-fit border-none bg-subPrimary  px-3 py-2 text-sm"
           >
             Save
           </Button>
         </div>
       ) : (
-        <span
-          className="flex w-full items-center gap-2 hover:cursor-pointer hover:opacity-80"
-          onDoubleClick={() => setMode(!mode)}
-        >
-          <span> {options.length} options</span>
-          {isRequired && <span className="text-rose-500">*</span>}
+        <>
+          <div className="flex items-center gap-2">
+            <span className="border-r border-slate-500 pr-2">
+              {" "}
+              {input.length !== 0 ? input : Select.type}
+            </span>
+            <span> {options.length} options</span>
+            <span
+              className="hover:cursor-pointer hover:opacity-80"
+              onClick={(e) => {
+                e.stopPropagation();
+                setMode(!mode);
+              }}
+            >
+              <PencilIcon
+                className="cursor-pointer  text-slate-500 hover:opacity-80"
+                size={18}
+              />
+            </span>
+          </div>
+          <Listbox disabled value={selected} onChange={setSelected}>
+            <div className="w-1/2 rounded-md border border-slate-500 bg-transparent">
+              <Listbox.Button
+                aria-disabled={true}
+                className="relative w-full rounded-md bg-transparent py-2 pl-3 pr-8 text-start text-white"
+              >
+                <span className="">{selected}</span>
+                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 ">
+                  <ChevronsUpDownIcon
+                    className="h-5 w-5 text-white"
+                    aria-hidden="true"
+                  />
+                </span>
+              </Listbox.Button>
+              <Transition
+                as={Fragment}
+                leave="transition ease-in duration-100"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-transparent shadow-lg ring-1 ring-black/5 focus:outline-none">
+                  {options.map((option, index) => (
+                    <Listbox.Option
+                      key={index}
+                      className={({ active }) =>
+                        `relative rounded-md   py-2 pl-3 text-base  ${
+                          active ? "bg-subPrimary text-white" : "text-black"
+                        }`
+                      }
+                      value={option}
+                    >
+                      {({ selected }) => (
+                        <>
+                          <span>{option}</span>
+                          <Check
+                            className={cn(
+                              "absolute right-1 top-1/4 hidden",
+                              selected && "block ",
+                            )}
+                            size={20}
+                          />
+                        </>
+                      )}
+                    </Listbox.Option>
+                  ))}
+                </Listbox.Options>
+              </Transition>
+            </div>
+          </Listbox>
+        </>
+      )}
+    </div>
+  );
+}
+function DesignOverlay() {
+  return (
+    <div className="group relative  flex h-24 w-full flex-col items-start justify-center gap-3 rounded-md border border-slate-500 px-6 py-3">
+      <div className="flex items-center gap-2">
+        <span className="border-r border-slate-500 pr-2"> {Select.type}</span>
+        <span> {Select.attribute?.design?.options.length} options</span>
+
+        <span className="hover:cursor-pointer hover:opacity-80">
           <PencilIcon
             className="cursor-pointer  text-slate-500 hover:opacity-80"
-            onClick={() => setMode(!mode)}
             size={18}
           />
         </span>
-      )}
+      </div>
+      <div className="w-1/2 rounded-md border border-slate-500 bg-transparent">
+        <div className="relative w-full rounded-md bg-transparent py-2 pl-3 pr-8 text-start text-white">
+          <span className="">{Select.attribute?.design.options[0]}</span>
 
-      <div
-        onClick={() => {
-          if (mode) {
-            update();
-            setMode(!mode);
-          }
-        }}
-        className="flex h-10 w-full select-none items-center rounded-md text-slate-500"
-      >
-        {Select.type} will display here.
+          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 ">
+            <ChevronsUpDownIcon
+              className="h-5 w-5 text-white"
+              aria-hidden="true"
+            />
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -137,37 +237,27 @@ interface FormProps {
 }
 const Form: React.FC<FormProps> = ({ element, isSubmitted = false }) => {
   const [options, setOptions] = useState<Array<string>>([]);
-  console.log("❄️ ~ file: Select.tsx:140 ~ options:", options);
-  useEffect(() => {
-    setOptions(element.attribute?.design?.input);
-  }, [element.attribute?.design?.input.length]);
-  const [selected, setSelected] = useState();
 
   useEffect(() => {
-    setSelected(element.attribute?.form.input);
-  }, [element.attribute?.form.input]);
-  const { updateElement } = useForms();
-  const update = () => {
-    updateElement({
-      element: {
-        ...element,
-        attribute: { form: { selected }, design: element.attribute?.design },
-      },
-    });
-  };
+    setOptions(element.attribute?.design?.options);
+  }, [element.attribute?.design?.input.length]);
+  const [selected, setSelected] = useState(
+    element.attribute?.design?.options[0],
+  );
+
   return (
     <div className=" mx-3  flex w-full  items-center gap-2  py-2">
       <input name={element.id} value={selected} className="hidden" />
       <Listbox value={selected} onChange={setSelected}>
-        <div className="relative w-1/2">
+        <div className="relative w-1/2 rounded-md border border-slate-500">
           <Listbox.Button
             aria-disabled={isSubmitted}
-            className="relative w-full rounded-md  bg-white py-2 pl-3 pr-8 text-start text-black"
+            className="relative w-full rounded-md  bg-transparent py-2 pl-3 pr-8 text-start text-white"
           >
             <span className="">{selected}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronsUpDownIcon
-                className="h-5 w-5 text-black"
+                className="h-5 w-5 text-white"
                 aria-hidden="true"
               />
             </span>
@@ -226,7 +316,10 @@ const Select: DndElementType = {
   attribute: {
     form: { input: "Choose your answer" },
     design: {
-      input: ["Option 1", "Option 2", "Option 3"],
+      isRequired: false,
+
+      input: "",
+      options: ["Option 1", "Option 2", "Option 3"],
     },
   },
   getAttribute: () => ({
@@ -235,6 +328,7 @@ const Select: DndElementType = {
     attribute: Select.attribute,
   }),
   designComponent: Design,
+  designOverlay: DesignOverlay,
   formComponent: Form,
   propertyComponent: Property,
 };

@@ -2,7 +2,7 @@ import Image from "next/image";
 import empty from "@/public/empty.png";
 const Empty = () => {
   return (
-    <div className="justify-start10 flex h-full w-full flex-col items-center gap-2 ">
+    <div className="justify-start10 relative flex h-full w-full flex-col items-center gap-2 ">
       <Image
         src={empty}
         alt="empty"

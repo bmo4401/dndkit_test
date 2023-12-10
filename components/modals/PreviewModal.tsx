@@ -49,7 +49,7 @@ const PreviewModal = ({ form }: { form: Form }) => {
         <div className="flex flex-col px-5">
           {elements.map((element) => {
             const FormComponent = FormElements[element.type].formComponent;
-            return <FormComponent element={element} />;
+            return <FormComponent key={element.id} element={element} />;
           })}
         </div>
         {/* Submit Button */}

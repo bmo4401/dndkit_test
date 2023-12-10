@@ -17,7 +17,6 @@ const PublishedForm = ({
   form: Form | (Submission & { name: string; description: string });
 }) => {
   const formStatus = useFormStatus();
-  console.log("❄️ ~ file: PublishedForm.tsx:20 ~ useFormStatus:", formStatus);
 
   const [elements, setElements] = useState<(AttributeType & { id: string })[]>(
     [],

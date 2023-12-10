@@ -1,21 +1,21 @@
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/libs/utils";
-import { Badge, CheckSquare, Eye, MoveRight, Pencil } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { formatDistance } from "date-fns";
 import formImage from "@/public/form.png";
 import { Form } from "@prisma/client";
+import { formatDistance } from "date-fns";
+import { CheckSquare, Eye, MoveRight, Pencil } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 export default function Card({ form }: { form: Form }) {
   return (
     <div className="flex h-full max-w-[70%] items-start justify-between rounded-md border border-slate-500 px-5 py-3">
       <div className="flex h-full max-w-[70%] flex-row items-start gap-3 px-3 ">
-        <div className=" relative aspect-square w-20 self-start p-0">
+        <div className="relative h-20 w-20 self-start overflow-hidden p-0">
           <Image
             src={formImage}
             alt=""
             fill
-            className="rounded-md object-cover "
+            className="rounded-md object-contain "
           />
         </div>
         <div className="flex h-full w-[calc(100%-5rem)] flex-col justify-between gap-2 p-0">
