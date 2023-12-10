@@ -198,7 +198,7 @@ export const getSubmissions = async ({ id }: { id: number }) => {
     });
     return res;
   } catch (error) {
-    .log("❄️ ~ file: form.ts:192 ~ error:", error);
+    console.log("❄️ ~ file: form.ts:192 ~ error:", error);
     throw new Error("some thing went wrong");
   }
 };
