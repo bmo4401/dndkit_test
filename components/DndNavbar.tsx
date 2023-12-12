@@ -1,5 +1,6 @@
 "use client";
 import { publishForm, saveForm } from "@/actions/form";
+import { collectDataFieldOnDesignMode } from "@/components/FormTable";
 import { Button } from "@/components/ui/Button";
 import useForms from "@/hooks/useForms";
 import useModal from "@/hooks/useModal";
@@ -15,24 +16,52 @@ const DndNavbar = ({ id }: { id: number }) => {
   const { setShowPreviewModal } = useModal();
   const router = useRouter();
   const { elements, clearElement } = useForms();
+  const handelSaveForm = async () => {
+    setIsSuccess(false);
+    const res = await saveForm({ id, content: JSON.stringify(elements) });
+
+    if (res.id) {
+      setTimeout(() => {
+        setIsStick(true);
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsStick(false);
+        }, 1000);
+      }, 1000);
+    }
+  };
+  const handlePublishForm = async () => {
+    setIsLoading(true);
+    await saveForm({ id, content: JSON.stringify(elements) });
+    let isFail = false;
+    elements.forEach((element) => {
+      if (
+        collectDataFieldOnDesignMode[element.type] &&
+        element.attribute?.design.input.length === 0
+      ) {
+        element.isValid = false;
+        isFail = true;
+        setIsLoading(false);
+        router.refresh();
+      }
+    });
+    if (isFail) return;
+    const res = await publishForm({
+      id,
+      content: JSON.stringify(elements),
+    });
+    if (res.id) {
+      setIsLoading(false);
+      router.push(`/published/${res.id}`);
+    } else {
+      throw new Error("Some thing wen wrong");
+    }
+  };
   return (
     <nav className="flex items-center gap-3 px-3 text-base">
       <Button onClick={() => clearElement()}>Clear</Button>
       <Button
-        onClick={async () => {
-          setIsSuccess(false);
-          const res = await saveForm({ id, content: JSON.stringify(elements) });
-
-          if (res.id) {
-            setTimeout(() => {
-              setIsStick(true);
-              setIsSuccess(true);
-              setTimeout(() => {
-                setIsStick(false);
-              }, 1000);
-            }, 1000);
-          }
-        }}
+        onClick={handelSaveForm}
         className={cn("w-[5.5rem]", isStick && "bg-green-500")}
       >
         {isSuccess ? (
@@ -48,22 +77,7 @@ const DndNavbar = ({ id }: { id: number }) => {
       <Button className="" onClick={() => setShowPreviewModal(true)}>
         Preview
       </Button>
-      <Button
-        className="bg-gradient border-none"
-        onClick={async () => {
-          setIsLoading(true);
-          const res = await publishForm({
-            id,
-            content: JSON.stringify(elements),
-          });
-          if (res.id) {
-            setIsLoading(false);
-            router.push(`/published/${res.id}`);
-          } else {
-            throw new Error("Some thing wen wrong");
-          }
-        }}
-      >
+      <Button className="bg-gradient border-none" onClick={handlePublishForm}>
         {!isLoading ? (
           "Publish"
         ) : (

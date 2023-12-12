@@ -1,12 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/Button";
 import useForms, { SelectedElementType } from "@/hooks/useForms";
+import { cn } from "@/libs/utils";
 import { DndElementType } from "@/types/element";
 import { PencilIcon, Type } from "lucide-react";
 import { useState } from "react";
 
 function Design({ element }: { element: SelectedElementType }) {
-  const { updateElement } = useForms();
+  const { updateElement, setIsValidElement } = useForms();
   const [mode, setMode] = useState(false);
   const [input, setInput] = useState(element.attribute?.design?.input);
   const [isRequired, setIsRequired] = useState(
@@ -19,7 +20,12 @@ function Design({ element }: { element: SelectedElementType }) {
     setMode(!mode);
   };
   return (
-    <div className=" flex min-h-[6rem] w-full flex-col items-start justify-between rounded-md border border-slate-500 px-6 py-3">
+    <div
+      className={cn(
+        " flex min-h-[6rem] w-full flex-col items-start justify-between rounded-md border px-6 py-3",
+        element.isValid ? " border-slate-500" : " border-rose-500",
+      )}
+    >
       {mode ? (
         <div className="flex  w-full flex-col items-start gap-2 ">
           <input
@@ -62,16 +68,23 @@ function Design({ element }: { element: SelectedElementType }) {
       ) : (
         <>
           <span
-            className="flex w-full items-center gap-2 hover:cursor-pointer hover:opacity-80"
-            onDoubleClick={() => setMode(!mode)}
+            onClick={() => {
+              setIsValidElement({ id: element.id, value: true });
+              setMode(!mode);
+            }}
+            className="flex w-fit items-center gap-2 hover:cursor-pointer hover:opacity-80"
           >
             <span> {input.length !== 0 ? input : Text.type}</span>
             {isRequired && <span className="text-rose-500">*</span>}
             <PencilIcon
               className="cursor-pointer  text-slate-500 hover:opacity-80"
-              onClick={() => setMode(!mode)}
               size={18}
             />
+            {!element.isValid && (
+              <p className="text-xs text-rose-500">
+                Please enter a name for this field to collect data in the table.
+              </p>
+            )}
           </span>
           <div
             onClick={() => {
@@ -171,6 +184,10 @@ const Text: DndElementType = {
   designOverlay: DesignOverlay,
   formComponent: Form,
   propertyComponent: Property,
+  isValid: true,
+  setIsValid: ({ value }: { value: boolean }) => ({
+    isValid: value,
+  }),
 };
 
 export default Text;

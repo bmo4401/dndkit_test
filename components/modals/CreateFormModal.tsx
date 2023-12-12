@@ -63,6 +63,7 @@ const CreateFormModal = () => {
             <span className="text-rose-500">*</span>
           </div>
           <input
+            autoComplete="off"
             id="name"
             type={"text"}
             name="name"
@@ -77,6 +78,7 @@ const CreateFormModal = () => {
             <label htmlFor="description">Description</label>
           </div>
           <input
+            autoComplete="off"
             id="description"
             type={"text"}
             name="description"
@@ -102,6 +104,7 @@ const SubmitForm = ({
   const { pending } = useFormStatus();
   return (
     <ButtonCustom
+      disabled={pending}
       aria-disabled={pending}
       type="submit"
       className={cn(

@@ -1,14 +1,14 @@
 "use client";
 
 import { FormElements } from "@/components/frame/right/Sidebar";
-import useForms from "@/hooks/useForms";
+import useForms, { SelectedElementType } from "@/hooks/useForms";
 import { cn, generateId } from "@/libs/utils";
 import { AttributeType, DndElementType } from "@/types/element";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import { Menu } from "lucide-react";
 
 interface FrameElementProps {
-  element: AttributeType;
+  element: SelectedElementType;
   id: string;
 }
 
@@ -83,14 +83,16 @@ const FrameElement: React.FC<FrameElementProps> = ({ element, id }) => {
         ref={handlerDrag.setNodeRef}
         {...handlerDrag.attributes}
         {...handlerDrag.listeners}
-        className=" flex aspect-square h-24 items-center justify-center rounded-md border border-slate-500"
+        className={cn(
+          " flex aspect-square h-24 items-center justify-center rounded-md border border-slate-500",
+        )}
       >
         {" "}
         <Menu />
       </div>
       <div
         className={cn(
-          "relative w-full ",
+          "relative w-full",
           (topHalf.isOver || bottomHalf.isOver) && "opacity-80",
         )}
       >

@@ -82,13 +82,13 @@ input[type="number"].hidden-control {
 .scroll-bar #table::-webkit-scrollbar-thumb {
   background-color: #64748b;
   border-radius: 999999px;
-  width: 3px;
+  width: 10px;
   height: 3px;
   border: 1px;
 }
 
 .scroll-bar #table::-webkit-scrollbar {
-  width: 5px;
+  width: 10px;
   height: 10px;
 }
 

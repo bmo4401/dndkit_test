@@ -1,7 +1,10 @@
 import { AttributeType } from "@/types/element";
 import { Form } from "@prisma/client";
 import { create } from "zustand";
-export type SelectedElementType = AttributeType & { id: string };
+export type SelectedElementType = AttributeType & {
+  id: string;
+  isValid?: boolean;
+};
 interface State {
   form: Form | null;
   elements: SelectedElementType[] | [];
@@ -18,6 +21,7 @@ interface State {
   removeElement: (id: string) => void;
   updateElement: ({ element }: { element: SelectedElementType }) => void;
   clearElement: () => void;
+  setIsValidElement: ({ value, id }: { value: boolean; id: string }) => void;
 }
 
 const useForms = create<State>((set, get) => ({
@@ -60,6 +64,14 @@ const useForms = create<State>((set, get) => ({
   clearElement: () => {
     set((state) => ({
       elements: [],
+    }));
+  },
+  setIsValidElement: ({ value, id }: { value: boolean; id: string }) => {
+    const newElements = [...get().elements];
+    const index = newElements.findIndex((el) => el.id === id);
+    newElements[index].isValid = true;
+    set((state) => ({
+      elements: newElements,
     }));
   },
 }));

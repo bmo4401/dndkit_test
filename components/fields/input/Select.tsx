@@ -16,18 +16,12 @@ import {
 import { Fragment, useEffect, useState } from "react";
 
 function Design({ element }: { element: SelectedElementType }) {
-  const [input, setInput] = useState(
-    element.attribute?.design.input || Select.type,
-  );
-  const { updateElement } = useForms();
+  const [input, setInput] = useState(element.attribute?.design.input);
+  const { updateElement, setIsValidElement } = useForms();
   const [mode, setMode] = useState(false);
 
   const [options, setOptions] = useState<string[]>(
     element.attribute?.design?.options,
-  );
-  const [isRequired] = useState(element.attribute?.design.isRequired);
-  const [selected, setSelected] = useState(
-    element.attribute?.design?.options[0],
   );
 
   /*   useEffect(() => {
@@ -71,7 +65,12 @@ function Design({ element }: { element: SelectedElementType }) {
     setMode(!mode);
   };
   return (
-    <div className="relative flex  min-h-[6rem]  w-full flex-col items-start justify-between  rounded-md border border-slate-500 px-6 py-3">
+    <div
+      className={cn(
+        "relative flex  min-h-[6rem]  w-full flex-col items-start justify-between  rounded-md border px-6 py-3",
+        element.isValid ? " border-slate-500" : " border-rose-500",
+      )}
+    >
       {mode ? (
         <div className="flex h-fit w-full flex-col gap-2 ">
           <div className="flex  w-full flex-col items-start gap-1">
@@ -129,32 +128,37 @@ function Design({ element }: { element: SelectedElementType }) {
         </div>
       ) : (
         <>
-          <div className="flex items-center gap-2">
+          <div
+            onClick={() => {
+              setIsValidElement({ id: element.id, value: true });
+              setMode(!mode);
+            }}
+            className="flex items-center gap-2 "
+          >
             <span className="border-r border-slate-500 pr-2">
               {" "}
               {input.length !== 0 ? input : Select.type}
             </span>
             <span> {options.length} options</span>
-            <span
-              className="hover:cursor-pointer hover:opacity-80"
-              onClick={(e) => {
-                e.stopPropagation();
-                setMode(!mode);
-              }}
-            >
+            <span className="hover:cursor-pointer hover:opacity-80">
               <PencilIcon
                 className="cursor-pointer  text-slate-500 hover:opacity-80"
                 size={18}
               />
             </span>
+            {!element.isValid && (
+              <p className="text-xs text-rose-500">
+                Please enter a name for this field to collect data in the table.
+              </p>
+            )}
           </div>
-          <Listbox disabled value={selected} onChange={setSelected}>
-            <div className="w-1/2 rounded-md border border-slate-500 bg-transparent">
+          <Listbox disabled value={element.attribute?.form.input}>
+            <div className="w-full rounded-md border border-slate-500 bg-transparent md:w-1/2">
               <Listbox.Button
                 aria-disabled={true}
                 className="relative w-full rounded-md bg-transparent py-2 pl-3 pr-8 text-start text-white"
               >
-                <span className="">{selected}</span>
+                <span className="">{element.attribute?.form.input}</span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 ">
                   <ChevronsUpDownIcon
                     className="h-5 w-5 text-white"
@@ -241,20 +245,23 @@ const Form: React.FC<FormProps> = ({ element, isSubmitted = false }) => {
   useEffect(() => {
     setOptions(element.attribute?.design?.options);
   }, [element.attribute?.design?.input.length]);
-  const [selected, setSelected] = useState(
-    element.attribute?.design?.options[0],
-  );
-
+  const [selected, setSelected] = useState("");
   return (
-    <div className=" mx-3  flex w-full  items-center gap-2  py-2">
+    <div className=" flex w-full  items-center gap-2  py-2">
       <input name={element.id} value={selected} className="hidden" />
-      <Listbox value={selected} onChange={setSelected}>
-        <div className="relative w-1/2 rounded-md border border-slate-500">
+      <Listbox
+        defaultValue={element.attribute?.form.input}
+        value={selected}
+        onChange={setSelected}
+      >
+        <div className="relative w-full rounded-md border border-slate-500 md:w-1/2">
           <Listbox.Button
             aria-disabled={isSubmitted}
             className="relative w-full rounded-md  bg-transparent py-2 pl-3 pr-8 text-start text-white"
           >
-            <span className="">{selected}</span>
+            <span className="">
+              {selected || element.attribute?.form.input}
+            </span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronsUpDownIcon
                 className="h-5 w-5 text-white"
@@ -316,8 +323,7 @@ const Select: DndElementType = {
   attribute: {
     form: { input: "Choose your answer" },
     design: {
-      isRequired: false,
-
+      isRequired: true,
       input: "",
       options: ["Option 1", "Option 2", "Option 3"],
     },
@@ -331,6 +337,7 @@ const Select: DndElementType = {
   designOverlay: DesignOverlay,
   formComponent: Form,
   propertyComponent: Property,
+  isValid: true,
 };
 
 export default Select;

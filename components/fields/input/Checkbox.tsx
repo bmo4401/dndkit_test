@@ -11,9 +11,7 @@ function Design({ element }: { element: SelectedElementType }) {
   const [input, setInput] = useState(
     element.attribute?.design.input || Checkbox.type,
   );
-  const [isRequired, setIsRequired] = useState(
-    element.attribute?.design.isRequired,
-  );
+  const [isRequired] = useState(element.attribute?.design.isRequired);
   const update = () => {
     updateElement({
       element: {

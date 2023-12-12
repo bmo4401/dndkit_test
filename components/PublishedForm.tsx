@@ -9,6 +9,7 @@ import { Check, RotateCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { toast } from "react-toastify";
 const validInput: Partial<ElementType>[] = [
   "Text",
   "TextArea",
@@ -34,54 +35,66 @@ const PublishedForm = ({
   }, [form.id]);
 
   const handleSubmit = async (formData: FormData) => {
-    let ids = [],
-      data: (AttributeType & { id: string })[] = [];
-    for (let i = 0; i < elements.length; i++) {
-      if (validInput.includes(elements[i].type)) {
-        ids.push(elements[i]);
-      }
-    }
-    for (let i = 0; i < ids.length; i++) {
-      let input =
-        formData.get(ids[i].id) === "true"
-          ? "✓"
-          : formData.get(ids[i].id) === ""
-            ? "(empty)"
-            : formData.get(ids[i].id);
-      data.push({
-        id: ids[i].id,
-        icon: ids[i].icon,
-        type: ids[i].type,
-        attribute: { form: { input } },
-      });
-    }
-    for (let i = 0; i < elements.length; i++) {
-      for (let j = 0; j < data.length; j++) {
-        if (elements[i].id === data[j].id) {
-          elements[i].attribute = {
-            ...elements[i].attribute,
-            ...data[j].attribute,
-          };
+    try {
+      let ids = [],
+        data: (AttributeType & { id: string })[] = [];
+      for (let i = 0; i < elements.length; i++) {
+        if (validInput.includes(elements[i].type)) {
+          ids.push(elements[i]);
         }
       }
-    }
-    const validData = JSON.stringify(elements);
-    const res = await submitForm({ id: form.id, data: validData });
-    if (res.id) {
-      setCheck(true);
-      setTimeout(() => {
-        router.push(`/published/${form.id}/view`);
-      }, 1000);
+      for (let i = 0; i < ids.length; i++) {
+        let input;
+        if (formData.get(ids[i].id) === "true") {
+          input = "✓";
+        } else if (formData.get(ids[i].id) === null) {
+          input = "×";
+        } else if (formData.get(ids[i].id) === "") {
+          if (ids[i].type === "Select") {
+            throw new Error("Missing input value");
+          }
+          input = "(empty)";
+        } else {
+          input = formData.get(ids[i].id);
+        }
+
+        data.push({
+          id: ids[i].id,
+          icon: ids[i].icon,
+          type: ids[i].type,
+          attribute: { form: { input } },
+        });
+      }
+      for (let i = 0; i < elements.length; i++) {
+        for (let j = 0; j < data.length; j++) {
+          if (elements[i].id === data[j].id) {
+            elements[i].attribute = {
+              ...elements[i].attribute,
+              ...data[j].attribute,
+            };
+          }
+        }
+      }
+      const validData = JSON.stringify(elements);
+      const res = await submitForm({ id: form.id, data: validData });
+      if (res.id) {
+        setCheck(true);
+        setTimeout(() => {
+          router.push(`/published/${form.id}/view`);
+        }, 1000);
+      }
+    } catch (err) {
+      toast.error("Maybe you miss something.");
     }
   };
 
   return (
     <div
       className={cn(
-        "flex h-screen w-screen items-start justify-center overflow-hidden transition-all duration-300 ease-in-out",
+        "flex h-full  w-screen items-start justify-center overflow-hidden transition-all duration-300 ease-in-out",
       )}
     >
-      <div className="scroll-bar relative z-20 flex max-h-[90%] w-[50%] flex-col  gap-5 overflow-hidden overflow-y-auto rounded-lg border border-slate-500 bg-black py-24">
+      <div className="scroll-bar relative z-20 flex max-h-[90%] w-[90%] flex-col gap-5  overflow-hidden overflow-y-auto rounded-lg border border-slate-500 bg-black py-24 md:w-[50%]">
         {/* absolute */}
         <div className="bg-gradient absolute left-0 top-0 flex h-20 w-[calc(100%)] items-center pl-5">
           {/* main line */}
@@ -126,7 +139,7 @@ const SubmitForm = ({
   return (
     <div className="w-full px-5">
       <Button
-        disabled={isSubmitted ?? formStatus.pending}
+        disabled={formStatus.pending ?? isSubmitted}
         type="submit"
         className="gradient-button w-full   rounded-full border-none  text-lg font-semibold text-white outline-none duration-200 hover:scale-105 hover:cursor-pointer"
       >

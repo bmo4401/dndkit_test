@@ -2,6 +2,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import CreateFormModal from "@/components/modals/CreateFormModal";
 import { cn } from "@/libs/utils";
+import ToastifyProvider from "@/providers/ToastProivder";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -27,7 +28,7 @@ export default function RootLayout({
       >
         {/* modal */}
         <CreateFormModal />
-
+        <ToastifyProvider />
         <Navbar />
         {children}
       </body>

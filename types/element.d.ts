@@ -36,4 +36,6 @@ export type DndElementType = {
     element: SelectedElementType;
     isSubmitted?: boolean;
   }>;
+  isValid?: boolean;
+  setIsValid?: ({ value }: { value: boolean }) => { isValid: value };
 };

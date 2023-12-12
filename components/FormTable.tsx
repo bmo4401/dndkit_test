@@ -1,18 +1,25 @@
 "use client";
 import Empty from "@/components/Empty";
+import { Filter } from "@/components/Filter";
 import { SubmissionType } from "@/components/View";
+import useCSV from "@/hooks/useCSV";
 import { cn } from "@/libs/utils";
 import {
+  ColumnFiltersState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { formatDistance } from "date-fns";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-type SubmittedFormType = {
+export type SubmittedFormType = {
   id: number;
   submittedAt: string;
   view: string;
@@ -37,32 +44,41 @@ type ValidDataType = {
   form: { input: string };
 };
 
-const validField: Record<string, boolean> = {
+export const collectDataFields: Record<string, boolean> = {
   Text: true,
   TextArea: true,
   Select: true,
   Checkbox: true,
 };
 
+export const collectDataFieldOnDesignMode: Record<string, boolean> = {
+  Text: true,
+  TextArea: true,
+  Select: true,
+};
 const FormTable = ({
   submittedForms,
 }: {
   submittedForms: SubmissionType[];
 }) => {
+  /* store to CSV data */
+  const { setCSVData, setHeader } = useCSV();
+  /* start -filter */
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  /* end - filter */
   const [info, setInfo] = useState<ValidDataType[]>([]);
   const [data, setData] = useState<SubmittedFormType[]>([]);
-
   useEffect(() => {
     setData(
       submittedForms.map((item) => {
         let rawData = JSON.parse(item.content) as AttributeType[];
-        rawData = rawData.filter((item) => validField[item.type]);
+        rawData = rawData.filter((item) => collectDataFields[item.type]);
 
         const validData = rawData.map((item) => {
           return { ...item.attribute };
         });
 
-        setInfo(validData.map((item) => item));
+        setInfo(validData);
         const ob = Object.fromEntries(
           validData.map((item, index) => [
             item.design?.input,
@@ -81,6 +97,20 @@ const FormTable = ({
       }),
     );
   }, []);
+  useEffect(() => {
+    if (data.length !== 0) {
+      setHeader(Object.keys(data[0]));
+
+      setCSVData(
+        data.map((item) => {
+          return {
+            ...item,
+            view: `${process.env.NEXT_PUBLIC_URL}/${item.view}`,
+          };
+        }),
+      );
+    }
+  }, [data.length]);
   const columnHelper = createColumnHelper<SubmittedFormType>();
   /* define columns */
   const columns = [
@@ -128,34 +158,55 @@ const FormTable = ({
   const table = useReactTable({
     data,
     columns,
+    state: {
+      columnFilters,
+    },
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     getCoreRowModel: getCoreRowModel(),
   });
   return (
     <div
       id="table"
       className={cn(
-        "scroll-bar h-fit max-w-[70%] ",
-        data.length !== 0 && "border border-slate-500",
+        "scroll-bar  h-fit max-h-[calc(100vh-20rem)] max-w-[70%] overflow-hidden overflow-y-auto border-slate-500",
       )}
     >
       {data.length !== 0 && (
-        <table className="max-w-[50%] rounded-md  border border-slate-500">
+        <table className="relative   rounded-md border border-slate-500">
           {/* Header */}
-          <thead className="border-b border-slate-500">
+          <thead className="sticky top-0 z-30 border-b border-slate-500">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <th
-                      className="min-w-[6rem] max-w-[12rem] break-words border-l border-slate-500 bg-subPrimary px-2 align-top text-sm"
+                      className="min-w-[6rem] max-w-[12rem] break-words border-l border-slate-500 bg-subPrimary px-2 py-1 align-top text-sm"
                       key={header.id}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
+                      {header.isPlaceholder ? null : (
+                        <div
+                          {...{
+                            className: header.column.getCanSort()
+                              ? "cursor-pointer select-none "
+                              : "",
+                            onClick: header.column.getToggleSortingHandler(),
+                          }}
+                        >
+                          {flexRender(
                             header.column.columnDef.header,
                             header.getContext(),
                           )}
+                          {header.column.getCanFilter() ? (
+                            <div className="pt-1">
+                              <Filter column={header.column} table={table} />
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
                     </th>
                   );
                 })}
@@ -221,4 +272,5 @@ const FormTable = ({
     </div>
   );
 };
+
 export default FormTable;
