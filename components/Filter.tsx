@@ -38,7 +38,7 @@ export function Filter({
             }
             onChange={(value) => column.setFilterValue(value)}
             placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
-            className="w-36 rounded-md px-2 text-slate-500 outline-none focus:outline-1
+            className="h-7 w-36 rounded-md px-2 text-slate-500 outline-none focus:outline-1
           "
             list={column.id + "list"}
           />
@@ -59,7 +59,7 @@ export function Filter({
                 ? `(${column.getFacetedMinMaxValues()?.[0]})`
                 : ""
             }`}
-            className="w-16 rounded-md px-2 text-slate-500 outline-none focus:outline-1
+            className="h-7 w-16 rounded-md px-2 text-slate-500 outline-none focus:outline-1
             "
           />
           <DebouncedInput
@@ -78,7 +78,7 @@ export function Filter({
                 ? `(${column.getFacetedMinMaxValues()?.[1]})`
                 : ""
             }`}
-            className="w-16 rounded-md px-2 text-slate-500 outline-none focus:outline-1
+            className="h-7 w-16 rounded-md px-2 text-slate-500 outline-none focus:outline-1
             "
           />
         </div>
